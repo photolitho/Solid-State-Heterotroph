@@ -151,14 +151,80 @@ nav button{flex:1;background:none;border:none;color:var(--dim);font-family:var(-
 nav button .ic{display:block;font-size:19px;margin-bottom:3px;font-family:var(--sans)}
 nav button.act{color:var(--cyan)}
 @media(min-width:900px){#ptable{min-width:0}}
+
+/* ---------- light (day) theme ---------- */
+html[data-theme=light]{--bg:#edf1f8;--panel:#ffffff;--panel2:#f2f5fb;--line:#c8d3e6;--txt:#15203a;
+  --dim:#5b6b8f;--cyan:#007a9c;--amber:#cf4f1a;
+  --c-ak:#d23a55;--c-ae:#c97f17;--c-tm:#cf4f1a;--c-pt:#a8731c;--c-md:#007a9c;--c-nm:#1d9450;
+  --c-ha:#7448cc;--c-ng:#9438bf;--c-la:#168f6e;--c-ac:#4358cc}
+html[data-theme=light] body{background:var(--bg)}
+html[data-theme=light] header{background:rgba(237,241,248,.93)}
+html[data-theme=light] nav{background:rgba(255,255,255,.96)}
+html[data-theme=light] #backdrop{background:rgba(30,40,70,.35)}
+#themeToggle{font-family:var(--mono);font-size:14px;padding:7px 10px;border-radius:7px;
+  border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;min-height:32px}
+
+/* ---------- engineer view modes ---------- */
+#modes{display:flex;gap:5px;padding:8px 12px 2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#modes button{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:6px 11px;border-radius:6px;
+  border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;white-space:nowrap;min-height:30px}
+#modes button.act{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07)}
+
+/* ---------- detail sheet additions ---------- */
+.sect{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--cyan);margin:18px 0 7px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+.badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;padding:5px 9px;border-radius:6px;
+  border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);
+  box-shadow:0 0 10px rgba(0,229,255,.22)}
+.props{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:7px;margin:4px 0 6px}
+.prop{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel2)}
+.prop .pk{font-size:8.5px;color:var(--dim);font-family:var(--mono);letter-spacing:.08em}
+.prop .pv{font-family:var(--mono);font-size:13px;margin-top:3px}
+.prop .pv small{font-size:9px;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+.chip{font-size:10.5px;padding:5px 10px;border-radius:14px;border:1px solid var(--line);
+  color:var(--txt);background:var(--panel2)}
+.magbadge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  padding:5px 10px;border-radius:6px;border:1px solid;margin:4px 0 6px}
+.hint{font-size:9.5px;color:var(--dim);font-family:var(--mono);text-align:center;margin-top:4px}
+.why{margin-top:6px;padding:12px 14px;border-left:3px solid var(--cyan);border-radius:0 9px 9px 0;
+  background:var(--panel2);font-size:13px;line-height:1.6;font-style:italic}
+.xtal3d{display:block;margin:4px auto;touch-action:none;cursor:grab;max-width:280px}
+
+/* ---------- compare view ---------- */
+#cmpView,#mapView{display:none;padding:12px 12px 8px}
+#cmpView.show,#mapView.show{display:block}
+.cmp-pick{display:flex;gap:8px;margin-bottom:10px}
+.cmp-pick select{flex:1;background:var(--bg);color:var(--txt);border:1px solid var(--line);
+  border-radius:7px;padding:9px 10px;font-family:var(--mono);font-size:13px;min-height:42px}
+.cmp-pick button{font-family:var(--mono);font-size:12px;padding:0 16px;border-radius:7px;min-height:42px;
+  border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);cursor:pointer}
+.cmp-sel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cmp-sel .chip{cursor:pointer;border-color:var(--cyan);color:var(--cyan)}
+#cmpTableWrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:100%}
+.cmp th,.cmp td{border:1px solid var(--line);padding:7px 9px;text-align:left;white-space:nowrap}
+.cmp th{color:var(--cyan);font-weight:600;background:var(--panel2)}
+.cmp td:first-child{color:var(--dim);position:sticky;left:0;background:var(--panel)}
+
+/* ---------- materials map ---------- */
+#mapSvg{display:block;width:100%;max-width:480px;margin:0 auto;touch-action:manipulation}
+#mapInfo{margin-top:10px;min-height:48px}
 </style>
 </head>
 <body>
 
 <header>
   <h1>SOLID·STATE <small>// periodic explorer</small></h1>
+  <button id="themeToggle" aria-label="toggle day / night theme">☀</button>
   <button id="semiToggle" aria-pressed="false">⏚ SEMI FOCUS</button>
 </header>
+<div id="modes" role="tablist" aria-label="engineer view mode">
+  <button data-mode="chem" class="act">⚗ CHEMISTRY</button>
+  <button data-mode="semi">⏚ SEMICONDUCTOR</button>
+  <button data-mode="phot">✦ PHOTONICS</button>
+  <button data-mode="mag">⊿ MAGNETICS</button>
+</div>
 
 <main>
   <section id="tableView">
@@ -167,6 +233,8 @@ nav button.act{color:var(--cyan)}
     <div id="legend"></div>
   </section>
   <section id="physView"></section>
+  <section id="cmpView"></section>
+  <section id="mapView"></section>
 </main>
 
 <div id="backdrop"></div>
@@ -182,14 +250,17 @@ nav button.act{color:var(--cyan)}
   </div>
   <div class="sheet-tabs">
     <button id="tabData" class="act">DATA</button>
-    <button id="tabPhys">SOLID STATE PHYSICS</button>
+    <button id="tabPhys">PHYSICS</button>
+    <button id="tabComp">COMPOUNDS</button>
   </div>
   <div class="sheet-body" id="sheetBody"></div>
 </div>
 
 <nav>
-  <button id="navTable" class="act"><span class="ic">⊞</span>TABLE</button>
-  <button id="navPhys"><span class="ic">ƒ</span>PHYSICS</button>
+  <button id="navTable" class="act" data-view="table"><span class="ic">⊞</span>TABLE</button>
+  <button id="navPhys" data-view="phys"><span class="ic">ƒ</span>PHYSICS</button>
+  <button id="navCmp" data-view="cmp"><span class="ic">⇄</span>COMPARE</button>
+  <button id="navMap" data-view="map"><span class="ic">◬</span>MAP</button>
 </nav>
 
 <script>
@@ -330,30 +401,141 @@ const ELEMENTS=R.map(r=>({z:r[0],symbol:r[1],name:r[2],mass:r[3],category:r[4],p
 const EFF_MASS={5:'mₑ*≈0.5 m₀',6:'mₑ*≈0.36 / mₕ*≈0.86 m₀ (diamond)',14:'mₑ*≈0.26 / mₕ*≈0.49 m₀',
   32:'mₑ*≈0.12 / mₕ*≈0.33 m₀',34:'mₕ*≈0.3 m₀ (p-type)',52:'mₑ*≈0.07 / mₕ*≈0.11 m₀'};
 
-/* III-V (+ wide-gap) compound semiconductors */
+/* III-V, II-VI & wide-gap compound semiconductors
+   props: [μe cm²/Vs, μh cm²/Vs, εr, κ W/mK] — representative 300 K values */
 const COMPOUNDS=[
- {f:'InP',name:'Indium Phosphide',star:true,structure:'Zincblende',bg:1.344,a:'5.869',direct:true,
-  me:'mₑ*≈0.08 m₀',ni:'~10⁷ cm⁻³',
+ {f:'InP',name:'Indium Phosphide',star:true,els:['In','P'],structure:'Zincblende',bg:1.344,a:'5.869',
+  direct:true,me:'mₑ*≈0.08 m₀',ni:'~10⁷ cm⁻³',dens:4.81,props:[5400,200,12.5,68],
   use:'The photonics platform: 1310/1550 nm telecom lasers, photodiodes & photonic ICs; high-electron-mobility HBTs and THz electronics.'},
- {f:'GaAs',name:'Gallium Arsenide',structure:'Zincblende',bg:1.424,a:'5.653',direct:true,
-  me:'mₑ*≈0.063 m₀',ni:'~10⁶ cm⁻³',
+ {f:'GaAs',name:'Gallium Arsenide',els:['Ga','As'],structure:'Zincblende',bg:1.424,a:'5.653',
+  direct:true,me:'mₑ*≈0.063 m₀',ni:'~10⁶ cm⁻³',dens:5.32,props:[8500,400,12.9,55],
   use:'RF MMICs & power amplifiers, red/IR LEDs, VCSELs, multi-junction space solar cells.'},
- {f:'In₀.₅₃Ga₀.₄₇As',name:'Indium Gallium Arsenide',structure:'Zincblende',bg:0.74,a:'5.869 (matched to InP)',direct:true,
-  me:'mₑ*≈0.041 m₀',ni:'~10¹² cm⁻³',
+ {f:'In₀.₅₃Ga₀.₄₇As',name:'Indium Gallium Arsenide',els:['In','Ga','As'],structure:'Zincblende',bg:0.74,
+  a:'5.869 (matched to InP)',direct:true,me:'mₑ*≈0.041 m₀',ni:'~10¹² cm⁻³',dens:5.50,props:[12000,300,13.9,5],
   use:'1550 nm photodetectors & SWIR imagers grown lattice-matched on InP; HEMT channels.'},
- {f:'GaN',name:'Gallium Nitride',structure:'Wurtzite',bg:3.39,a:'3.189 (c = 5.185)',direct:true,
-  me:'mₑ*≈0.20 m₀',ni:'~10⁻¹⁰ cm⁻³',
+ {f:'GaN',name:'Gallium Nitride',els:['Ga','N'],structure:'Wurtzite',bg:3.39,a:'3.189 (c = 5.185)',
+  direct:true,me:'mₑ*≈0.20 m₀',ni:'~10⁻¹⁰ cm⁻³',dens:6.15,props:[1200,30,8.9,130],
   use:'Blue/white LEDs (2014 Nobel), fast chargers & power FETs, 5G base-station amplifiers.'},
- {f:'Al₀.₃Ga₀.₇As',name:'Aluminium Gallium Arsenide',structure:'Zincblende',bg:1.80,a:'5.655',direct:true,
-  me:'mₑ*≈0.092 m₀',ni:'~10⁴ cm⁻³',
+ {f:'Al₀.₃Ga₀.₇As',name:'Aluminium Gallium Arsenide',els:['Al','Ga','As'],structure:'Zincblende',bg:1.80,
+  a:'5.655',direct:true,me:'mₑ*≈0.092 m₀',ni:'~10⁴ cm⁻³',dens:4.88,props:[2000,100,12.0,11],
   use:'Barrier & cladding layers for GaAs lasers, DBR mirrors in VCSELs, HEMT barriers.'},
- {f:'4H-SiC',name:'Silicon Carbide (4H)',structure:'Hexagonal polytype',bg:3.26,a:'3.073 (c = 10.05)',direct:false,
-  me:'mₑ*≈0.37 m₀',ni:'~10⁻⁸ cm⁻³',
+ {f:'In₀.₅₂Al₀.₄₈As',name:'Indium Aluminium Arsenide',els:['In','Al','As'],structure:'Zincblende',bg:1.46,
+  a:'5.868 (matched to InP)',direct:true,me:'mₑ*≈0.075 m₀',ni:'~10⁴ cm⁻³',dens:4.90,props:[1000,100,12.3,10],
+  use:'Barrier & buffer layers in InP HEMTs and quantum cascade lasers; pairs with InGaAs.'},
+ {f:'4H-SiC',name:'Silicon Carbide (4H)',els:['Si','C'],structure:'Hexagonal polytype',bg:3.26,
+  a:'3.073 (c = 10.05)',direct:false,me:'mₑ*≈0.37 m₀',ni:'~10⁻⁸ cm⁻³',dens:3.21,props:[900,120,9.7,370],
   use:'EV traction inverters, kV-class Schottky diodes & MOSFETs, harsh-environment sensors.'},
- {f:'InSb',name:'Indium Antimonide',structure:'Zincblende',bg:0.17,a:'6.479',direct:true,
-  me:'mₑ*≈0.014 m₀',ni:'~10¹⁶ cm⁻³',
-  use:'Mid-IR (3–5 µm) detectors & thermal imaging; ultra-high electron mobility Hall sensors.'}
+ {f:'InSb',name:'Indium Antimonide',els:['In','Sb'],structure:'Zincblende',bg:0.17,a:'6.479',
+  direct:true,me:'mₑ*≈0.014 m₀',ni:'~10¹⁶ cm⁻³',dens:5.78,props:[77000,850,16.8,18],
+  use:'Mid-IR (3–5 µm) detectors & thermal imaging; ultra-high electron mobility Hall sensors.'},
+ {f:'InAs',name:'Indium Arsenide',els:['In','As'],structure:'Zincblende',bg:0.354,a:'6.058',
+  direct:true,me:'mₑ*≈0.023 m₀',ni:'~10¹⁵ cm⁻³',dens:5.67,props:[40000,500,15.1,27],
+  use:'IR detectors, quantum dots, topological qubit nanowire research.'},
+ {f:'GaP',name:'Gallium Phosphide',els:['Ga','P'],structure:'Zincblende',bg:2.26,a:'5.451',
+  direct:false,me:'mₑ*≈0.82 m₀',ni:'~10⁰ cm⁻³',dens:4.14,props:[250,150,11.1,110],
+  use:'Green/yellow LEDs (N-doped), nonlinear nanophotonics.'},
+ {f:'AlN',name:'Aluminium Nitride',els:['Al','N'],structure:'Wurtzite',bg:6.2,a:'3.112 (c = 4.982)',
+  direct:true,me:'mₑ*≈0.40 m₀',ni:null,dens:3.26,props:[300,14,8.5,285],
+  use:'Deep-UV LEDs, piezoelectric BAW RF filters, high-thermal-conductivity substrates.'},
+ {f:'CdTe',name:'Cadmium Telluride',els:['Cd','Te'],structure:'Zincblende',bg:1.5,a:'6.482',
+  direct:true,me:'mₑ*≈0.095 m₀',ni:'~10⁵ cm⁻³',dens:5.85,props:[1050,100,10.2,6],
+  use:'Thin-film solar panels (lowest-cost PV), X-ray & gamma detectors.'},
+ {f:'ZnO',name:'Zinc Oxide',els:['Zn','O'],structure:'Wurtzite',bg:3.37,a:'3.250 (c = 5.207)',
+  direct:true,me:'mₑ*≈0.24 m₀',ni:null,dens:5.61,props:[200,50,8.5,50],
+  use:'Transparent conducting films, UV photodetectors, varistors, thin-film transistors.'}
 ];
+
+/* ---------- magnetic properties ----------
+   z: [class, χmol (10⁻⁶ cm³/mol), ordered moment (μB/atom), T_Curie (K), T_Néel (K)] */
+const MAG={
+ 1:['dia',-4],2:['dia',-1.9],3:['para',14.2],4:['dia',-9],5:['dia',-6.7],6:['dia',-5.9],
+ 7:['dia',-12],8:['para',3449],9:['dia',-9.6],10:['dia',-6.7],11:['para',16],12:['para',13.1],
+ 13:['para',16.5],14:['dia',-3.9],15:['dia',-26.7],16:['dia',-15.5],17:['dia',-40.5],18:['dia',-19.6],
+ 19:['para',20.8],20:['para',40],21:['para',295],22:['para',153],23:['para',255],
+ 24:['afm',180,0.5,null,311],25:['afm',511,null,null,95],
+ 26:['ferro',null,2.22,1043],27:['ferro',null,1.72,1394],28:['ferro',null,0.61,631],
+ 29:['dia',-5.5],30:['dia',-11.4],31:['dia',-21.6],32:['dia',-11.6],33:['dia',-5.5],34:['dia',-25],
+ 35:['dia',-56.4],36:['dia',-28.8],37:['para',17],38:['para',92],39:['para',188],40:['para',120],
+ 41:['para',208],42:['para',89],43:['para',270],44:['para',39],45:['para',102],46:['para',540],
+ 47:['dia',-19.5],48:['dia',-19.8],49:['dia',-64],50:['para',3.1],51:['dia',-99],52:['dia',-38],
+ 53:['dia',-88.7],54:['dia',-43.9],55:['para',29],56:['para',20.6],57:['para',118],
+ 58:['afm',2450,null,null,12.5],59:['para',5010],60:['afm',5628,null,null,19.9],61:['para',null],
+ 62:['afm',1278,null,null,106],63:['afm',30900,null,null,90.4],64:['ferro',null,7.63,292],
+ 65:['ferro',null,9.34,222,230],66:['ferro',null,10.33,85,179],67:['ferro',null,10.34,20,132],
+ 68:['ferro',null,9.07,20,85],69:['afm',24700,null,null,56],70:['para',67],71:['para',183],
+ 72:['para',75],73:['para',154],74:['para',59],75:['para',67],76:['para',9.9],77:['para',25.6],
+ 78:['para',202],79:['dia',-28],80:['dia',-33.4],81:['dia',-50.9],82:['dia',-23],83:['dia',-280],
+ 86:['dia',null],90:['para',132],92:['para',409],94:['para',610]};
+const MAGCLS={ferro:['FERROMAGNETIC','#ff5370'],afm:['ANTIFERROMAGNETIC','#ff9d35'],
+  para:['PARAMAGNETIC','#ffd166'],dia:['DIAMAGNETIC','#4d9fff']};
+
+/* ---------- semiconductor role badges ---------- */
+const ROLES={
+ 3:['Photonics Material (LiNbO₃)'],4:['P-type Dopant (III-V)'],
+ 5:['P-type Dopant (Si)','Dielectric (BN)'],6:['Wide-gap Semiconductor (diamond)','SiC Constituent'],
+ 7:['Dielectric (Si₃N₄)','III-V Constituent (GaN, AlN)'],8:['Dielectric (SiO₂, HfO₂)'],
+ 9:['Lithography / Etch Chemistry'],12:['P-type Dopant (GaN)'],
+ 13:['Contact / Interconnect Metal','III-V Constituent (AlGaAs, AlN)'],
+ 14:['Semiconductor','Dielectric (SiO₂, Si₃N₄)'],15:['N-type Dopant (Si)','III-V Constituent (InP, GaP)'],
+ 17:['Etch Chemistry'],18:['Lithography / Plasma Gas'],22:['Contact / Barrier Metal'],
+ 26:['Magnetic Material'],27:['Contact Metal (CoSi₂)','Magnetic Material'],
+ 28:['Contact Metal (NiSi)','Magnetic Material'],29:['Contact / Interconnect Metal'],
+ 30:['II-VI Constituent (ZnO, ZnS)'],31:['III-V Semiconductor Constituent'],32:['Semiconductor'],
+ 33:['N-type Dopant (Si)','III-V Constituent (GaAs, InGaAs)'],34:['Semiconductor (II-VI, CIGS)'],
+ 36:['Lithography Gas (KrF 248 nm)'],40:['Dielectric (high-k ZrO₂)'],42:['Contact Metal','2-D Semiconductor (MoS₂)'],
+ 44:['Contact / Interconnect Metal'],47:['Contact Metal','Plasmonics'],48:['II-VI Constituent (CdTe)'],
+ 49:['Photonics Material (InP)','III-V Constituent','Transparent Electrode (ITO)'],
+ 50:['Semiconductor (α-Sn)','Packaging / Solder'],51:['N-type Dopant','III-V Constituent (InSb)'],
+ 52:['II-VI Constituent (CdTe)','Phase-change Memory'],54:['Lithography / Etch Gas'],
+ 64:['Magnetic Material'],68:['Photonics Material (EDFA 1550 nm)'],72:['Dielectric (high-k HfO₂)'],
+ 73:['Contact / Barrier Metal'],74:['Contact Metal (plugs, vias)'],78:['Contact Metal (PtSi)'],
+ 79:['Contact / Bonding Metal'],82:['Piezoelectric (PZT)','Perovskite PV']};
+
+/* ---------- electronic transport properties ----------
+   z: [μe cm²/Vs, μh cm²/Vs, εr]  (semiconductors only) */
+const EPROPS={5:[1,1,7.8],6:[2200,1800,5.7],14:[1400,450,11.7],32:[3900,1900,16.0],
+  34:[null,30,6.0],52:[1100,820,28]};
+/* thermal conductivity κ (W/m·K, 300 K) */
+const KAPPA={1:0.18,2:0.15,3:85,4:200,5:27,6:2200,7:0.026,8:0.027,9:0.028,10:0.049,11:142,12:156,
+ 13:237,14:150,15:0.24,16:0.27,17:0.009,18:0.018,19:103,20:200,21:16,22:22,23:31,24:94,25:7.8,
+ 26:80,27:100,28:91,29:401,30:116,31:41,32:60,33:50,34:0.5,35:0.12,36:0.0095,37:58,38:35,39:17,
+ 40:23,41:54,42:138,44:117,45:150,46:72,47:429,48:97,49:82,50:67,51:24,52:3,53:0.45,54:0.0057,
+ 55:36,56:18,57:13,58:11,60:17,64:11,68:14,70:39,72:23,73:57,74:173,75:48,76:88,77:147,78:72,
+ 79:318,80:8.3,81:46,82:35,83:8,90:54,92:27,94:6.7};
+
+/* ---------- why this element matters ---------- */
+const WHY={
+ 5:'Used to create p-type silicon. Without boron, modern CMOS electronics would not exist.',
+ 6:'Diamond offers the ultimate wide-bandgap platform (5.5 eV, κ = 2200 W/mK) for power electronics and quantum sensing; as SiC constituent it powers EV inverters.',
+ 7:'Si₃N₄ passivates every chip, and as the N in GaN it enabled the blue LED revolution.',
+ 8:'Thermally grown SiO₂ is the most perfect dielectric interface known — it is the reason silicon, not germanium, won the IC race.',
+ 13:'Aluminium carried the signals of every IC for 30 years, and AlGaAs/AlN heterostructures underpin lasers and RF filters.',
+ 14:'The substrate of civilisation: 99.9999999% pure single crystals, an ideal native oxide, and a mature 300 mm ecosystem make Si unbeatable for logic and memory.',
+ 15:'The workhorse n-type dopant of silicon and the group-V half of InP — the backbone of fibre-optic communications.',
+ 26:'The prototypical ferromagnet (T_C = 1043 K). Spintronics, transformers and data storage all trace back to iron.',
+ 27:'Ferromagnetic, and the metal behind CoSi₂ contacts and modern interconnects below 10 nm.',
+ 28:'Ferromagnetic workhorse of NiSi salicide contacts and magnetic multilayers.',
+ 29:'Damascene copper interconnect (1997) rescued chip scaling when aluminium resistance became the bottleneck.',
+ 31:'Enables high-speed III-V semiconductors used in RF systems and optoelectronics — GaAs amplifiers and GaN power stages.',
+ 32:'The first transistor was germanium. Today SiGe alloys boost mobility in every advanced CMOS node.',
+ 33:'Arsenic dopes silicon n-type and forms GaAs and InGaAs — the channels of the fastest transistors.',
+ 34:'Selenium rectifiers and xerography launched solid-state electronics before silicon took over.',
+ 36:'KrF excimer lasers at 248 nm printed a decade of Moore’s law.',
+ 47:'The best room-temperature electrical conductor and the heart of plasmonics.',
+ 48:'CdTe thin-film modules are the lowest-cost solar technology in production.',
+ 49:'Critical for InP photonic integrated circuits and coherent optical communications — and every touchscreen uses indium tin oxide.',
+ 50:'Solder joints in every package; grey α-tin is a model topological semimetal.',
+ 51:'Dopant, phase-change memory ingredient (GST), and the Sb in InSb infrared detectors.',
+ 52:'Tellurium sits in CdTe solar cells, HgCdTe night vision and GST phase-change memory.',
+ 64:'Gadolinium orders ferromagnetically at room temperature (T_C = 292 K) — the benchmark for magnetocaloric refrigeration.',
+ 68:'Erbium-doped fibre amplifiers make transoceanic 1550 nm communication possible — every intercontinental bit passes through erbium.',
+ 72:'HfO₂ high-k dielectrics replaced SiO₂ at the 45 nm node, ending a gate-leakage crisis.',
+ 74:'Tungsten plugs connect a trillion transistors per chip, layer by layer.',
+ 79:'Gold wire bonds and ohmic contacts on III-Vs — but a lifetime-killing deep trap if it reaches silicon.',
+ 82:'PZT piezoelectrics and halide perovskite solar cells keep lead at the research frontier despite RoHS.'};
+
+/* photonics-relevant elements (lasers, modulators, detectors, waveguides) */
+const PHOT_SET=new Set([3,7,13,14,15,30,31,32,33,34,48,49,51,52,68]);
 
 const CATS={ak:['Alkali metal','--c-ak'],ae:['Alkaline earth','--c-ae'],tm:['Transition metal','--c-tm'],
   pt:['Post-transition','--c-pt'],md:['Metalloid / semiconductor','--c-md'],nm:['Reactive nonmetal','--c-nm'],
@@ -418,7 +600,7 @@ function buildTable(){
 /* ---------- detail sheet ---------- */
 const sheet=document.getElementById('sheet'),backdrop=document.getElementById('backdrop'),
   sheetBody=document.getElementById('sheetBody'),tabData=document.getElementById('tabData'),
-  tabPhys=document.getElementById('tabPhys');
+  tabPhys=document.getElementById('tabPhys'),tabComp=document.getElementById('tabComp');
 let curElem=null,curTab='data';
 function fmt(v,unit='',dec=null){
   if(v==null)return'—';
@@ -448,36 +630,113 @@ function closeSheet(){sheet.classList.remove('open');backdrop.classList.remove('
 backdrop.addEventListener('click',closeSheet);
 tabData.addEventListener('click',()=>{curTab='data';renderTab()});
 tabPhys.addEventListener('click',()=>{curTab='phys';renderTab()});
+tabComp.addEventListener('click',()=>{curTab='comp';renderTab()});
 function drow(k,v,hl=false){return`<div class="drow"><span class="k">${k}</span><span class="v${hl?' hl':''}">${v}</span></div>`}
+const SHELL_NAMES=['K','L','M','N','O','P','Q'];
+function shellSVG(z,col){
+  const sh=electronConfig(z).shells;
+  let s='<svg viewBox="0 0 160 160" width="160" height="160" style="display:block;margin:6px auto" aria-label="electron shell diagram">';
+  s+=`<circle cx="80" cy="80" r="5.5" fill="${col}"/>`;
+  sh.forEach((n,i)=>{
+    const r=16+i*(58/Math.max(sh.length-1,1)),last=i===sh.length-1;
+    s+=`<circle cx="80" cy="80" r="${r.toFixed(1)}" fill="none" stroke="${last?col:'var(--line)'}" stroke-width="${last?1.6:1}"/>`;
+    const dots=Math.min(n,20);
+    for(let k=0;k<dots;k++){
+      const a=2*Math.PI*k/dots-Math.PI/2;
+      s+=`<circle cx="${(80+r*Math.cos(a)).toFixed(1)}" cy="${(80+r*Math.sin(a)).toFixed(1)}" r="2.3" fill="${last?col:'var(--dim)'}"/>`;}
+    if(n>dots)s+=`<text x="${(80+r*0.7071+5).toFixed(0)}" y="${(80-r*0.7071-3).toFixed(0)}" font-size="8" font-family="monospace" fill="var(--dim)">${n}</text>`;
+  });
+  return s+'</svg>';
+}
+function eStructure(e,col){
+  const ec=electronConfig(e.z),sh=ec.shells;
+  const val=sh[sh.length-1];
+  const dist=sh.map((n,i)=>`<span title="shell n=${i+1}" style="${i===sh.length-1?`color:${col};font-weight:700`:''}">${SHELL_NAMES[i]||i+1}: ${n}</span>`).join(' · ');
+  return `<div class="sect">ELECTRONIC STRUCTURE</div>`+
+    shellSVG(e.z,col)+
+    drow('Shell distribution',`<span style="font-family:var(--mono)">${dist}</span>`)+
+    drow('Valence electrons',`<b style="color:${col}">${val}</b> (outermost shell)`,true)+
+    drow('Orbital occupancy',ec.cfg)+
+    `<div class="hint">shells K–Q ↔ principal quantum number n = 1–7 · the highlighted valence shell governs bonding & doping</div>`;
+}
+function magSection(e){
+  const m=MAG[e.z];
+  if(!m)return drow('Magnetic data','—');
+  const[cls,chi,mom,tc,tn]=m,c=MAGCLS[cls];
+  let h=`<span class="magbadge" style="color:${c[1]};border-color:${c[1]};background:${c[1]}18">${c[0]}${(cls==='ferro'&&tc<300)?` &lt; ${tc} K`:''}${(cls==='afm'&&tn)?` &lt; ${tn} K`:''}</span>`;
+  h+=drow('Molar susceptibility χₘ',chi==null?'—':`${chi>0?'+':''}${chi} ×10⁻⁶ cm³/mol`);
+  if(mom!=null)h+=drow('Ordered moment',`${mom} μB/atom`);
+  if(tc!=null)h+=drow('Curie temperature T꜀',`${tc} K`);
+  if(tn!=null)h+=drow('Néel temperature T_N',`${tn} K`);
+  return h;
+}
 function renderTab(){
   tabData.classList.toggle('act',curTab==='data');
   tabPhys.classList.toggle('act',curTab==='phys');
+  tabComp.classList.toggle('act',curTab==='comp');
   const e=curElem;if(!e)return;
+  const col=`var(${CATS[e.category][1]})`;
   if(curTab==='data'){
-    const ec=electronConfig(e.z);
     sheetBody.innerHTML=
       drow('Atomic number',e.z)+
       drow('Atomic mass',fmt(e.mass,' u'))+
-      drow('Electron configuration',ec.cfg)+
       drow('Electronegativity (Pauling)',fmt(e.electronegativity))+
       drow('Melting point',e.meltingPoint==null?'—':`${e.meltingPoint} K · ${(e.meltingPoint-273.15).toFixed(0)} °C`)+
       drow('Boiling point',e.boilingPoint==null?'—':`${e.boilingPoint} K · ${(e.boilingPoint-273.15).toFixed(0)} °C`)+
       drow('Density',fmt(e.density,' g/cm³'))+
-      drow('Discovered',e.discoveredYear===0?'Ancient':fmt(e.discoveredYear));
-  }else{
+      drow('Discovered',e.discoveredYear===0?'Ancient':fmt(e.discoveredYear))+
+      eStructure(e,col);
+  }else if(curTab==='phys'){
     const x=XTALS[e.crystalStructure||'U'],bt=BANDTYPE[e.bandType||'U'];
     let gap='—';
     if(e.bandGap!=null)gap=`${e.bandGap} eV <span class="dirchip ${e.gapKind==='D'?'d':'i'}">${e.gapKind==='D'?'DIRECT':'INDIRECT'}</span>`;
+    const roles=ROLES[e.z];
+    const ep=EPROPS[e.z],kap=KAPPA[e.z];
+    let props='';
+    if(ep||kap!=null){
+      const cells=[];
+      if(ep&&ep[0]!=null)cells.push(['μₑ ELECTRON MOBILITY',`${ep[0]} <small>cm²/V·s</small>`]);
+      if(ep&&ep[1]!=null)cells.push(['μₚ HOLE MOBILITY',`${ep[1]} <small>cm²/V·s</small>`]);
+      if(ep&&ep[2]!=null)cells.push(['εᵣ REL. PERMITTIVITY',`${ep[2]}`]);
+      if(kap!=null)cells.push(['κ THERMAL COND.',`${kap} <small>W/m·K</small>`]);
+      props=`<div class="sect">ELECTRONIC PROPERTIES</div><div class="props">`+
+        cells.map(([k,v])=>`<div class="prop"><div class="pk">${k}</div><div class="pv">${v}</div></div>`).join('')+`</div>`;
+    }
+    const xt3d=STRUCTS[e.crystalStructure]?
+      `<svg id="elXtal" class="xtal3d" viewBox="0 0 280 250" width="280" height="250"></svg>
+       <div class="hint">⟲ drag to rotate</div>`:'';
     sheetBody.innerHTML=
-      drow('Crystal structure',x[0])+
-      drow('Bravais lattice',x[1])+
-      drow('Lattice constant a',e.latticeConstant==null?'—':e.latticeConstant+' Å')+
+      (roles?`<div class="sect">SEMICONDUCTOR ROLE</div><div class="badges">${roles.map(r=>`<span class="badge">${r}</span>`).join('')}</div>`:'')+
+      `<div class="sect">BAND STRUCTURE</div>`+
       drow('Band gap (300 K)',gap,e.bandGap!=null)+
       drow('Classification',`<span style="color:${bt[1]}">${bt[0]}</span>`)+
       drow('Effective mass',EFF_MASS[e.z]||'—')+
       (e.niLog!=null?drow('Intrinsic nᵢ (300 K)',`~10${sup(Math.round(e.niLog))} cm⁻³`,true):'')+
-      `<div class="apps-blk"><div class="t">DEVICE APPLICATIONS</div>${e.deviceApplications}</div>`;
+      props+
+      `<div class="sect">CRYSTAL STRUCTURE</div>`+
+      drow('Structure',x[0])+
+      drow('Bravais lattice',x[1])+
+      drow('Lattice constant a',e.latticeConstant==null?'—':e.latticeConstant+' Å')+
+      (COORD[e.crystalStructure]?drow('Coordination number',COORD[e.crystalStructure]):'')+
+      xt3d+
+      `<div class="sect">MAGNETISM</div>`+magSection(e)+
+      `<div class="sect">TECHNOLOGY APPLICATIONS</div>
+       <div class="chips">${e.deviceApplications.split(';').map(a=>`<span class="chip">${a.trim()}</span>`).join('')}</div>
+       <div class="sect">WHY THIS ELEMENT MATTERS</div>
+       <div class="why">${WHY[e.z]||defaultWhy(e)}</div>`;
+    if(STRUCTS[e.crystalStructure])initXtal3d(document.getElementById('elXtal'),e.crystalStructure);
+  }else{
+    const list=COMPOUNDS.filter(c=>c.els.includes(e.symbol));
+    sheetBody.innerHTML=list.length?
+      `<div class="sect">SEMICONDUCTOR COMPOUNDS WITH ${e.symbol.toUpperCase()}</div>
+       <div id="compounds">${list.map(compCard).join('')}</div>`:
+      `<div class="sect">COMPOUNDS</div>
+       <div class="apps-blk">No common semiconductor compounds with ${e.name} in this dataset. Try Ga, In, As, P, N, Al, Si, C, Cd, Te, Sb or Zn.</div>`;
   }
+}
+function defaultWhy(e){
+  const bt=BANDTYPE[e.bandType||'U'][0].toLowerCase();
+  return `${e.name} is a ${CATS[e.category][0].toLowerCase()} (${bt}). Its main technological role: ${e.deviceApplications.toLowerCase()}.`;
 }
 
 /* ---------- semiconductor focus mode ---------- */
@@ -493,24 +752,22 @@ function barChart(){
     <div class="bar-track"><div class="bar-fill${m.direct?'':' indirect'}" style="width:${(m.bg/max*78).toFixed(1)}%"></div>
     <span class="bar-val"><b>${m.bg}</b> eV<span class="dirchip ${m.direct?'d':'i'}">${m.direct?'D':'I'}</span></span></div></div>`).join('');
 }
-function compCards(){
-  return COMPOUNDS.map(c=>`<div class="comp-card${c.star?' star':''}">
+function compCard(c){
+  return`<div class="comp-card${c.star?' star':''}">
     <h4>${c.star?'★ ':''}${c.f}</h4><div class="cname">${c.name}</div>
     <dl><dt>structure</dt><dd>${c.structure}</dd>
     <dt>Eg</dt><dd>${c.bg} eV ${c.direct?'direct':'indirect'}</dd>
     <dt>a</dt><dd>${c.a} Å</dd>
     <dt>m*</dt><dd>${c.me||'—'}</dd>
     <dt>nᵢ</dt><dd>${c.ni||'—'}</dd></dl>
-    <div class="use">${c.use}</div></div>`).join('');
+    <div class="use">${c.use}</div></div>`;
 }
+function compCards(){return COMPOUNDS.map(compCard).join('')}
 semiToggle.addEventListener('click',()=>{
   semiOn=!semiOn;
   semiToggle.classList.toggle('on',semiOn);
   semiToggle.setAttribute('aria-pressed',semiOn);
-  document.querySelectorAll('.cell').forEach(c=>{
-    const e=ELEMENTS[+c.dataset.z-1];
-    c.classList.toggle('dim',semiOn&&!isSemi(e));
-  });
+  refreshCells();
   if(semiOn&&!semiPanel.innerHTML){
     semiPanel.innerHTML=`<h2>⏚ SEMICONDUCTOR FOCUS</h2>
       <h3>BAND GAP COMPARISON · Eg @ 300 K · <span style="color:var(--cyan)">cyan = direct</span> / <span style="color:var(--amber)">amber = indirect</span></h3>
@@ -566,9 +823,11 @@ physView.innerHTML=`
   <div class="sub">Conventional unit cells of the lattices that dominate semiconductor physics.</div>
   <div class="xtalbtns" id="xtalBtns">
     <button data-x="FCC" class="act">FCC</button><button data-x="BCC">BCC</button>
-    <button data-x="DC">DIAMOND</button><button data-x="ZB">ZINCBLENDE</button>
+    <button data-x="HCP">HCP</button><button data-x="DC">DIAMOND</button>
+    <button data-x="ZB">ZINCBLENDE</button>
   </div>
-  <svg id="xtalSvg" viewBox="0 0 300 280" width="300" height="280" aria-label="crystal structure"></svg>
+  <svg id="xtalSvg" class="xtal3d" viewBox="0 0 300 280" width="300" height="280" aria-label="crystal structure"></svg>
+  <div class="hint">⟲ drag to rotate</div>
   <div id="xtalCaption"></div>
 </div>
 <div class="pcard">
@@ -641,63 +900,258 @@ function calcNi(){
 document.getElementById('ccMat').addEventListener('change',calcNi);
 document.getElementById('ccT').addEventListener('input',calcNi);
 
-/* ---------- crystal structure SVG viewer ---------- */
-const XTAL_DEFS={
-  FCC:{cap:'FCC — atoms at 8 corners + 6 face centres · 4 atoms/cell · packing 74% · Cu, Al, Au, Ni, Pt',
-    atoms:c=>[...corners(),[.5,.5,0],[.5,.5,1],[.5,0,.5],[.5,1,.5],[0,.5,.5],[1,.5,.5]].map(p=>[p,0])},
-  BCC:{cap:'BCC — atoms at 8 corners + body centre · 2 atoms/cell · packing 68% · Fe, W, Mo, Nb, Ta',
-    atoms:c=>[...corners(),[.5,.5,.5]].map(p=>[p,0])},
-  DC:{cap:'DIAMOND CUBIC — FCC + identical basis at (¼,¼,¼) · 8 atoms/cell · Si, Ge, C(diamond), α-Sn',
-    atoms:c=>[...fccPts().map(p=>[p,0]),...tetraPts().map(p=>[p,0])]},
-  ZB:{cap:'ZINCBLENDE — two interpenetrating FCC sublattices of different species · GaAs, InP, InSb, ZnS',
-    atoms:c=>[...fccPts().map(p=>[p,0]),...tetraPts().map(p=>[p,1])]}
-};
+/* ---------- interactive 3D crystal structure engine ----------
+   orthographic projection with drag-to-rotate (pointer events) */
 function corners(){const a=[];for(const x of[0,1])for(const y of[0,1])for(const z of[0,1])a.push([x,y,z]);return a}
 function fccPts(){return[...corners(),[.5,.5,0],[.5,.5,1],[.5,0,.5],[.5,1,.5],[0,.5,.5],[1,.5,.5]]}
 function tetraPts(){return[[.25,.25,.25],[.75,.75,.25],[.75,.25,.75],[.25,.75,.75]]}
-function proj([x,y,z]){
-  const s=105,cx=150,cy=160;
-  return[cx+(x-y)*Math.cos(Math.PI/6)*s,cy+(x+y)*Math.sin(Math.PI/6)*s*0.85-z*s*0.95,(x+y)*0.5+z];
+function cubeEdges(){
+  const c=corners(),E=[];
+  for(let i=0;i<8;i++)for(let j=i+1;j<8;j++)
+    if(c[i].filter((v,k)=>v!==c[j][k]).length===1)E.push([c[i],c[j]]);
+  return E;
 }
-function drawXtal(key){
-  const svg=document.getElementById('xtalSvg'),def=XTAL_DEFS[key];
-  const E=[];const c=corners();
-  for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){
-    if(c[i].filter((v,k)=>v!==c[j][k]).length===1)E.push([c[i],c[j]]);}
+function hexPts(){
+  const pts=[],H=0.92;
+  for(const z of[0,1]){
+    for(let k=0;k<6;k++){const a=Math.PI*k/3;
+      pts.push([.5+.46*Math.cos(a),.5+.46*Math.sin(a),z*H]);}
+    pts.push([.5,.5,z*H]);
+  }
+  for(let k=0;k<3;k++){const a=Math.PI*(2*k/3)+Math.PI/6;
+    pts.push([.5+.27*Math.cos(a),.5+.27*Math.sin(a),H/2]);}
+  return pts;
+}
+function hexEdges(){
+  const E=[],H=0.92,v=k=>{const a=Math.PI*k/3;return[.5+.46*Math.cos(a),.5+.46*Math.sin(a)]};
+  for(const z of[0,H])for(let k=0;k<6;k++){
+    const[ax,ay]=v(k),[bx,by]=v((k+1)%6);E.push([[ax,ay,z],[bx,by,z]]);}
+  for(let k=0;k<6;k++){const[ax,ay]=v(k);E.push([[ax,ay,0],[ax,ay,H]]);}
+  return E;
+}
+const STRUCTS={
+  FCC:{cap:'FCC — 8 corners + 6 face centres · 4 atoms/cell · packing 74% · Cu, Al, Au, Ni, Pt',
+    atoms:()=>fccPts().map(p=>[p,0]),edges:cubeEdges},
+  BCC:{cap:'BCC — 8 corners + body centre · 2 atoms/cell · packing 68% · Fe, W, Mo, Nb, Ta',
+    atoms:()=>[...corners(),[.5,.5,.5]].map(p=>[p,0]),edges:cubeEdges},
+  SC:{cap:'SIMPLE CUBIC — 8 corners · 1 atom/cell · packing 52% · only Po',
+    atoms:()=>corners().map(p=>[p,0]),edges:cubeEdges},
+  DC:{cap:'DIAMOND CUBIC — FCC + identical basis at (¼,¼,¼) · 8 atoms/cell · Si, Ge, C, α-Sn',
+    atoms:()=>[...fccPts().map(p=>[p,0]),...tetraPts().map(p=>[p,0])],edges:cubeEdges},
+  ZB:{cap:'ZINCBLENDE — two interpenetrating FCC sublattices, different species · GaAs, InP, InSb',
+    atoms:()=>[...fccPts().map(p=>[p,0]),...tetraPts().map(p=>[p,1])],edges:cubeEdges},
+  HCP:{cap:'HCP — hexagonal close-packed, ABAB stacking · packing 74% · Mg, Ti, Zn, Co, Zr',
+    atoms:()=>hexPts().map(p=>[p,0]),edges:hexEdges}
+};
+const COORD={FCC:12,HCP:12,BCC:8,SC:6,DC:4,ZB:4};
+function rot3([x,y,z],ax,ay){
+  x-=.5;y-=.5;z-=.46;
+  let x1=x*Math.cos(ay)+z*Math.sin(ay),z1=-x*Math.sin(ay)+z*Math.cos(ay);
+  let y1=y*Math.cos(ax)-z1*Math.sin(ax),z2=y*Math.sin(ax)+z1*Math.cos(ax);
+  return[x1,y1,z2];
+}
+function renderXtal3d(svg,key,ax,ay){
+  const def=STRUCTS[key];if(!def)return;
+  const W=+svg.viewBox.baseVal.width,Hh=+svg.viewBox.baseVal.height;
+  const cx=W/2,cy=Hh/2,s=Math.min(W,Hh)*0.62;
+  const P=p=>{const[x,y,z]=rot3(p,ax,ay);return[cx+x*s,cy+y*s*0.92-z*s*0.18,z]};
   let g='';
-  for(const[a,b]of E){const p=proj(a),q=proj(b);
-    g+=`<line x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" stroke="#2a3a66" stroke-width="1"/>`;}
-  const atoms=def.atoms().map(([p,sp])=>{const q=proj(p);return{x:q[0],y:q[1],d:q[2],sp}})
-    .sort((a,b)=>a.d-b.d);
+  for(const[a,b]of def.edges()){
+    const p=P(a),q=P(b);
+    g+=`<line x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`;}
+  const atoms=def.atoms().map(([p,sp])=>{const q=P(p);return{x:q[0],y:q[1],d:q[2],sp}}).sort((a,b)=>a.d-b.d);
   for(const a of atoms){
-    const col=a.sp?'#ff6b35':'#00e5ff',r=a.sp?9:11;
-    g+=`<circle cx="${a.x.toFixed(1)}" cy="${a.y.toFixed(1)}" r="${r}" fill="${col}" fill-opacity="${0.45+a.d*0.18}" stroke="${col}" stroke-width="1"/>`;}
-  if(key==='ZB')g+=`<g font-family="monospace" font-size="10"><circle cx="60" cy="262" r="6" fill="#00e5ff"/><text x="72" y="266" fill="#7a8bb0">cation (Ga/In)</text><circle cx="185" cy="262" r="5" fill="#ff6b35"/><text x="196" y="266" fill="#7a8bb0">anion (As/P)</text></g>`;
+    const col=a.sp?'#ff6b35':'#00e5ff',r=(a.sp?7.5:9)*(1+a.d*0.25);
+    g+=`<circle cx="${a.x.toFixed(1)}" cy="${a.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${col}" fill-opacity="${(0.55+a.d*0.4).toFixed(2)}" stroke="${col}" stroke-width="1"/>`;}
   svg.innerHTML=g;
-  document.getElementById('xtalCaption').textContent=def.cap;
 }
+function initXtal3d(svg,key,onstate){
+  let ax=-0.45,ay=0.62,drag=null,raf=0;
+  const draw=()=>{raf=0;renderXtal3d(svg,key,ax,ay)};
+  const queue=()=>{if(!raf)raf=requestAnimationFrame(draw)};
+  svg.addEventListener('pointerdown',ev=>{drag=[ev.clientX,ev.clientY];svg.setPointerCapture(ev.pointerId)});
+  svg.addEventListener('pointermove',ev=>{
+    if(!drag)return;
+    ay+=(ev.clientX-drag[0])*0.012;ax+=(ev.clientY-drag[1])*0.012;
+    ax=Math.max(-1.5,Math.min(1.5,ax));
+    drag=[ev.clientX,ev.clientY];queue();});
+  const end=()=>{drag=null};
+  svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+  draw();
+  return{setKey(k){key=k;queue()}};
+}
+let physXtal=null;
 document.getElementById('xtalBtns').addEventListener('click',ev=>{
   const b=ev.target.closest('button');if(!b)return;
   document.querySelectorAll('#xtalBtns button').forEach(x=>x.classList.toggle('act',x===b));
-  drawXtal(b.dataset.x);
+  physXtal.setKey(b.dataset.x);
+  document.getElementById('xtalCaption').textContent=STRUCTS[b.dataset.x].cap;
 });
 
+/* ---------- engineer view modes ---------- */
+let curMode='chem';
+function modeColor(e){
+  if(curMode==='chem')return`var(${CATS[e.category][1]})`;
+  if(curMode==='semi'){
+    const r=(ROLES[e.z]||[]).join(' ');
+    if(/Dopant/.test(r))return'#4ade80';
+    if(e.bandType==='S')return'#3da9ff';
+    if(/Dielectric/.test(r))return'#a855f7';
+    if(e.bandType==='C')return'var(--amber)';
+    return null;
+  }
+  if(curMode==='phot')return PHOT_SET.has(e.z)?'var(--cyan)':null;
+  if(curMode==='mag'){const m=MAG[e.z];return m?MAGCLS[m[0]][1]:null;}
+  return null;
+}
+const MODE_LEGEND={
+  chem:()=>Object.values(CATS).map(([n,v])=>[n,`var(${v})`]),
+  semi:()=>[['Dopant','#4ade80'],['Semiconductor','#3da9ff'],['Dielectric','#a855f7'],['Metal','var(--amber)'],['Other','var(--line)']],
+  phot:()=>[['Photonics material (lasers · modulators · detectors · waveguides)','var(--cyan)'],['Other','var(--line)']],
+  mag:()=>[...Object.values(MAGCLS).map(([n,c])=>[n,c]),['Unknown','var(--line)']]
+};
+function refreshCells(){
+  document.querySelectorAll('.cell').forEach(c=>{
+    const e=ELEMENTS[+c.dataset.z-1];
+    const col=modeColor(e);
+    c.style.setProperty('--cat',col||'var(--line)');
+    c.classList.toggle('dim',(semiOn&&!isSemi(e))||(col===null&&curMode!=='chem'));
+  });
+  document.getElementById('legend').innerHTML=
+    MODE_LEGEND[curMode]().map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
+}
+document.getElementById('modes').addEventListener('click',ev=>{
+  const b=ev.target.closest('button');if(!b)return;
+  curMode=b.dataset.mode;
+  document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('act',x===b));
+  refreshCells();
+});
+
+/* ---------- day / night theme ---------- */
+const themeToggle=document.getElementById('themeToggle');
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  themeToggle.textContent=t==='light'?'☾':'☀';
+  document.querySelector('meta[name=theme-color]').content=t==='light'?'#edf1f8':'#0a0e1a';
+  try{localStorage.setItem('sshet-theme',t)}catch(_){}
+}
+themeToggle.addEventListener('click',()=>
+  setTheme(document.documentElement.dataset.theme==='light'?'dark':'light'));
+try{if(localStorage.getItem('sshet-theme')==='light')setTheme('light')}catch(_){}
+
+/* ---------- material comparison tool ---------- */
+const cmpView=document.getElementById('cmpView');
+let cmpSel=['e14','c0','c3'];
+function matData(id){
+  if(id[0]==='e'){
+    const e=ELEMENTS[+id.slice(1)-1],ep=EPROPS[e.z],m=MAG[e.z];
+    return{label:e.symbol,name:e.name,z:e.z,bg:e.bandGap,dir:e.gapKind,
+      xtal:XTALS[e.crystalStructure||'U'][0],dens:e.density,
+      me:ep?ep[0]:null,mh:ep?ep[1]:null,eps:ep?ep[2]:null,kap:KAPPA[e.z],
+      mag:m?MAGCLS[m[0]][0]:null,magc:m?MAGCLS[m[0]][1]:null};
+  }
+  const c=COMPOUNDS[+id.slice(1)];
+  return{label:c.f,name:c.name,z:'—',bg:c.bg,dir:c.direct?'D':'I',xtal:c.structure,dens:c.dens,
+    me:c.props[0],mh:c.props[1],eps:c.props[2],kap:c.props[3],mag:'DIAMAGNETIC',magc:'#4d9fff'};
+}
+function renderCompare(){
+  const opts=`<optgroup label="— Compounds —">${COMPOUNDS.map((c,i)=>`<option value="c${i}">${c.f} · ${c.name}</option>`).join('')}</optgroup>`+
+    `<optgroup label="— Elements —">${ELEMENTS.map(e=>`<option value="e${e.z}">${e.z} ${e.symbol} · ${e.name}</option>`).join('')}</optgroup>`;
+  const mats=cmpSel.map(matData);
+  const row=(k,f)=>`<tr><td>${k}</td>${mats.map(f).join('')}</tr>`;
+  const v=(x,u='')=>x==null?'—':x+u;
+  cmpView.innerHTML=`<div class="pcard">
+    <h2>⇄ MATERIAL COMPARISON</h2>
+    <div class="sub">Pick up to 4 elements or compounds. Tap a selected chip to remove it.</div>
+    <div class="cmp-pick"><select id="cmpAdd">${opts}</select><button id="cmpAddBtn">+ ADD</button></div>
+    <div class="cmp-sel">${cmpSel.map((id,i)=>`<span class="chip" data-i="${i}">${matData(id).label} ✕</span>`).join('')||'<span style="color:var(--dim);font-size:11px">nothing selected</span>'}</div>
+    <div id="cmpTableWrap"><table class="cmp">
+      <tr><td></td>${mats.map(m=>`<th>${m.label}</th>`).join('')}</tr>
+      ${row('Atomic number',m=>`<td>${m.z}</td>`)}
+      ${row('Band gap (eV)',m=>`<td>${m.bg==null?'—':m.bg+(m.dir?` <span class="dirchip ${m.dir==='D'?'d':'i'}">${m.dir==='D'?'DIR':'IND'}</span>`:'')}</td>`)}
+      ${row('Crystal structure',m=>`<td>${m.xtal}</td>`)}
+      ${row('Density (g/cm³)',m=>`<td>${v(m.dens)}</td>`)}
+      ${row('μₑ (cm²/V·s)',m=>`<td>${v(m.me)}</td>`)}
+      ${row('μₚ (cm²/V·s)',m=>`<td>${v(m.mh)}</td>`)}
+      ${row('εᵣ',m=>`<td>${v(m.eps)}</td>`)}
+      ${row('κ (W/m·K)',m=>`<td>${v(m.kap)}</td>`)}
+      ${row('Magnetism',m=>`<td>${m.mag?`<span style="color:${m.magc}">${m.mag}</span>`:'—'}</td>`)}
+    </table></div></div>`;
+  document.getElementById('cmpAddBtn').addEventListener('click',()=>{
+    const id=document.getElementById('cmpAdd').value;
+    if(cmpSel.length<4&&!cmpSel.includes(id)){cmpSel.push(id);renderCompare();}
+  });
+  cmpView.querySelectorAll('.cmp-sel .chip').forEach(ch=>
+    ch.addEventListener('click',()=>{cmpSel.splice(+ch.dataset.i,1);renderCompare();}));
+}
+
+/* ---------- semiconductor materials map (Eg vs lattice constant) ---------- */
+const MAPPTS=[
+ {f:'Si',a:5.431,bg:1.12,d:false,app:'CMOS logic & memory, PV, MEMS',wafer:'300 mm — the industry default'},
+ {f:'Ge',a:5.658,bg:0.66,d:false,app:'SiGe BiCMOS, photodetectors',wafer:'200 mm; also epi on Si'},
+ {f:'GaAs',a:5.653,bg:1.424,d:true,app:'RF PAs, VCSELs, space PV',wafer:'150 mm semi-insulating'},
+ {f:'AlGaAs',a:5.655,bg:1.80,d:true,app:'Laser cladding, DBRs',wafer:'epi on GaAs (lattice-matched)'},
+ {f:'InP',a:5.869,bg:1.344,d:true,app:'Telecom lasers, photonic ICs',wafer:'100–150 mm — photonics hub'},
+ {f:'InGaAs',a:5.869,bg:0.74,d:true,app:'1550 nm detectors, HEMTs',wafer:'epi on InP (lattice-matched)'},
+ {f:'InAlAs',a:5.868,bg:1.46,d:true,app:'HEMT barriers, QCLs',wafer:'epi on InP (lattice-matched)'},
+ {f:'GaN',a:3.189,bg:3.39,d:true,app:'Power FETs, LEDs, 5G PAs',wafer:'GaN-on-Si / GaN-on-SiC epi'},
+ {f:'SiC',a:3.073,bg:3.26,d:false,app:'EV inverters, kV diodes',wafer:'200 mm 4H-SiC ramping'}];
+function renderMap(){
+  const W=480,H=380,L=52,R=18,T=18,B=46;
+  const x=a=>L+(a-2.9)/(6.2-2.9)*(W-L-R),y=g=>H-B-(g/3.7)*(H-T-B);
+  let s='';
+  for(let g=0;g<=3.5;g+=0.5)s+=`<line x1="${L}" y1="${y(g)}" x2="${W-R}" y2="${y(g)}" stroke="var(--line)" stroke-width="${g%1?0.4:0.8}"/>
+    <text x="${L-7}" y="${y(g)+3}" font-size="9" text-anchor="end" fill="var(--dim)" font-family="monospace">${g.toFixed(1)}</text>`;
+  for(let a=3;a<=6;a+=0.5)s+=`<line x1="${x(a)}" y1="${T}" x2="${x(a)}" y2="${H-B}" stroke="var(--line)" stroke-width="0.4"/>
+    <text x="${x(a)}" y="${H-B+14}" font-size="9" text-anchor="middle" fill="var(--dim)" font-family="monospace">${a.toFixed(1)}</text>`;
+  s+=`<text x="${(L+W-R)/2}" y="${H-8}" font-size="10" text-anchor="middle" fill="var(--dim)" font-family="monospace">lattice constant a (Å)</text>
+  <text x="14" y="${(T+H-B)/2}" font-size="10" text-anchor="middle" fill="var(--dim)" font-family="monospace" transform="rotate(-90 14 ${(T+H-B)/2})">band gap Eg (eV)</text>`;
+  s+=`<line x1="${x(5.869)}" y1="${T}" x2="${x(5.869)}" y2="${H-B}" stroke="#00e5ff" stroke-width="0.7" stroke-dasharray="3 5" opacity="0.5"/>
+  <text x="${x(5.869)+4}" y="${T+10}" font-size="8.5" fill="var(--cyan)" font-family="monospace">InP ecosystem</text>`;
+  MAPPTS.forEach((p,i)=>{
+    const c=p.d?'#00e5ff':'#ff6b35';
+    s+=`<g class="mappt" data-i="${i}" style="cursor:pointer">
+      <circle cx="${x(p.a)}" cy="${y(p.bg)}" r="11" fill="${c}" fill-opacity="0.15"/>
+      <circle cx="${x(p.a)}" cy="${y(p.bg)}" r="5" fill="${c}"/>
+      <text x="${x(p.a)+9}" y="${y(p.bg)-7}" font-size="10" fill="var(--txt)" font-family="monospace">${p.f}</text></g>`;
+  });
+  document.getElementById('mapView').innerHTML=`<div class="pcard">
+    <h2>◬ SEMICONDUCTOR MATERIALS MAP</h2>
+    <div class="sub">The classic Eg vs lattice-constant chart. Materials on the same vertical line can be grown
+    on each other defect-free (lattice matching) — that is why the InP column owns telecom photonics.
+    <span style="color:var(--cyan)">cyan = direct gap</span> · <span style="color:var(--amber)">amber = indirect</span>. Tap a point.</div>
+    <svg id="mapSvg" viewBox="0 0 ${W} ${H}"> ${s}</svg>
+    <div id="mapInfo" class="apps-blk" style="display:none"></div></div>`;
+  document.getElementById('mapSvg').addEventListener('click',ev=>{
+    const g=ev.target.closest('.mappt');if(!g)return;
+    const p=MAPPTS[+g.dataset.i],inf=document.getElementById('mapInfo');
+    inf.style.display='block';
+    inf.innerHTML=`<div class="t">${p.f} · ${p.bg} eV ${p.d?'DIRECT':'INDIRECT'} · a = ${p.a} Å</div>
+      ${p.app}<br><span style="color:var(--dim)">Wafer ecosystem: ${p.wafer}</span>`;
+  });
+}
+
 /* ---------- bottom nav ---------- */
-const navTable=document.getElementById('navTable'),navPhys=document.getElementById('navPhys'),
-  tableView=document.getElementById('tableView');
+const tableView=document.getElementById('tableView');
+const VIEWS={table:tableView,phys:physView,cmp:cmpView,map:document.getElementById('mapView')};
 function showView(v){
-  navTable.classList.toggle('act',v==='table');
-  navPhys.classList.toggle('act',v==='phys');
-  tableView.style.display=v==='table'?'':'none';
-  physView.classList.toggle('show',v==='phys');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('act',b.dataset.view===v));
+  for(const[k,el]of Object.entries(VIEWS)){
+    if(k==='table')el.style.display=v==='table'?'':'none';
+    else el.classList.toggle('show',k===v);
+  }
   closeSheet();
 }
-navTable.addEventListener('click',()=>showView('table'));
-navPhys.addEventListener('click',()=>showView('phys'));
+document.querySelector('nav').addEventListener('click',ev=>{
+  const b=ev.target.closest('button');if(b)showView(b.dataset.view);
+});
 
 /* ---------- init ---------- */
 buildTable();
-calcBragg();calcRay();calcNi();drawXtal('FCC');
+calcBragg();calcRay();calcNi();
+physXtal=initXtal3d(document.getElementById('xtalSvg'),'FCC');
+document.getElementById('xtalCaption').textContent=STRUCTS.FCC.cap;
+renderCompare();renderMap();
 
 /* swipe-down to close sheet */
 let tY=null;

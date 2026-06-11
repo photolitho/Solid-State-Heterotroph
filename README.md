@@ -18,6 +18,18 @@ semiconductor / insulator classification, effective mass and device applications
 - **Physics reference tab** — Bragg's law calculator, Rayleigh resolution calculator,
   intrinsic carrier concentration vs temperature, SVG crystal structure viewer
   (FCC / BCC / diamond cubic / zincblende), and key formulas with a Fermi–Dirac sketch.
+- **Day / night theme** — full light theme toggle, persisted across sessions.
+- **Engineer view modes** — recolor the table by Chemistry, Semiconductor (dopants /
+  semiconductors / dielectrics / metals), Photonics or Magnetics relevance.
+- **Magnetism** — per-element classification (dia/para/ferro/antiferromagnetic),
+  susceptibility, ordered moment, Curie & Néel temperatures.
+- **Electronic structure** — animated shell diagram with valence highlighting and orbital occupancy.
+- **Interactive 3D crystal cells** — drag-to-rotate FCC, BCC, HCP, diamond cubic, zincblende.
+- **Compounds tab** — per-element list of semiconductor compounds (13 materials).
+- **Material comparison** — side-by-side table of up to 4 elements/compounds (mobility,
+  permittivity, thermal conductivity, magnetism…).
+- **Materials map** — the classic band gap vs lattice constant chart with the InP ecosystem,
+  direct/indirect coding and wafer-ecosystem notes.
 - **Full PWA** — `manifest.json` + cache-first `sw.js`; works completely offline after first
   load and is installable from Safari on iOS (Share → Add to Home Screen).
 

@@ -1,5 +1,5 @@
 /* Solid State Explorer — service worker: cache-first for full offline use */
-const CACHE = 'solidstate-v1';
+const CACHE = 'solidstate-v2';
 const ASSETS = [
   './',
   './index.html',
