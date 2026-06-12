@@ -238,6 +238,7 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
   font-size:12px;font-family:var(--mono)}
 #updBanner button{margin-left:auto;font-family:var(--mono);font-size:11px;padding:7px 13px;
   border-radius:7px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08);cursor:pointer}
+#updBanner #updClose{margin-left:0;border-color:var(--line);color:var(--dim);padding:7px 10px}
 
 /* ---------- quiz ---------- */
 .qopt{display:block;width:100%;text-align:left;font-family:var(--mono);font-size:12.5px;
@@ -300,7 +301,7 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
   <div class="sheet-body" id="sheetBody"></div>
 </div>
 
-<div id="updBanner" hidden>⟳ Update available<button id="updReload">RELOAD</button></div>
+<div id="updBanner" hidden>⟳ Update available<button id="updReload">RELOAD</button><button id="updClose" aria-label="dismiss">✕</button></div>
 
 <nav>
   <button id="navTable" class="act" data-view="table"><span class="ic">⊞</span>TABLE</button>
@@ -1525,18 +1526,20 @@ sheet.addEventListener('touchend',e=>{
   if(tY!=null&&e.changedTouches[0].clientY-tY>70&&sheet.scrollTop<=0)closeSheet();tY=null;},{passive:true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
 
-/* ---------- service worker + update notification ---------- */
+/* ---------- service worker + update notification ----------
+   The banner must appear only when a NEW worker replaces an EXISTING one.
+   On first install (or after iOS evicts the worker) controllerchange also
+   fires via clients.claim() — hadController filters that case out. */
 document.getElementById('updReload').addEventListener('click',()=>location.reload());
-if('serviceWorker'in navigator)
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').then(reg=>{
-    reg.addEventListener('updatefound',()=>{
-      const nw=reg.installing;if(!nw)return;
-      nw.addEventListener('statechange',()=>{
-        if(nw.state==='activated'&&navigator.serviceWorker.controller)
-          document.getElementById('updBanner').hidden=false;
-      });
-    });
-  }).catch(()=>{}));
+document.getElementById('updClose').addEventListener('click',()=>
+  document.getElementById('updBanner').hidden=true);
+if('serviceWorker'in navigator){
+  const hadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(hadController)document.getElementById('updBanner').hidden=false;
+  });
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
 </script>
 </body>
 </html>

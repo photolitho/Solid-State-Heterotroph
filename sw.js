@@ -1,5 +1,5 @@
 /* Solid State Explorer — service worker: cache-first for full offline use */
-const CACHE = 'solidstate-v3';
+const CACHE = 'solidstate-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,11 @@ const ASSETS = [
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      // cache:'reload' bypasses the HTTP cache so a stale copy can never
+      // be precached during a deploy
+      .then(c => c.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
   );
 });
 
