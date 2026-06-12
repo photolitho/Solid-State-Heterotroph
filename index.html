@@ -210,6 +210,44 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
 /* ---------- materials map ---------- */
 #mapSvg{display:block;width:100%;max-width:480px;margin:0 auto;touch-action:manipulation}
 #mapInfo{margin-top:10px;min-height:48px}
+
+/* ---------- search, quick access & table density ---------- */
+#toolsRow{display:flex;gap:8px;padding:10px 12px 0;align-items:center}
+#searchBox{flex:1;background:var(--panel);color:var(--txt);border:1px solid var(--line);
+  border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:13px;min-height:40px}
+#searchBox:focus{outline:none;border-color:var(--cyan)}
+#sizeBtn{font-family:var(--mono);font-size:12px;padding:0 13px;border-radius:8px;min-height:40px;
+  border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer}
+#quickRow{display:flex;gap:6px;padding:8px 12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.qchip{font-family:var(--mono);font-size:11px;padding:6px 11px;border-radius:14px;
+  border:1px solid var(--line);background:var(--panel);color:var(--txt);cursor:pointer;white-space:nowrap}
+.qchip.fav{border-color:var(--amber);color:var(--amber)}
+.cell.searchdim{opacity:.08}
+#ptable.size-s{grid-template-columns:repeat(18,minmax(34px,1fr));min-width:680px}
+#ptable.size-s .cell{min-width:34px;min-height:38px}
+#ptable.size-s .cell .nm{display:none}
+#ptable.size-l{grid-template-columns:repeat(18,minmax(58px,1fr));min-width:1110px}
+#favBtn{position:absolute;top:8px;right:14px;background:none;border:none;font-size:24px;
+  color:var(--amber);cursor:pointer;padding:6px;line-height:1}
+.sheet-head{position:relative}
+
+/* ---------- update banner ---------- */
+#updBanner{position:fixed;left:12px;right:12px;bottom:calc(64px + env(safe-area-inset-bottom) + 8px);
+  z-index:60;display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;
+  background:var(--panel2);border:1px solid var(--cyan);box-shadow:0 4px 24px rgba(0,0,0,.5);
+  font-size:12px;font-family:var(--mono)}
+#updBanner button{margin-left:auto;font-family:var(--mono);font-size:11px;padding:7px 13px;
+  border-radius:7px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08);cursor:pointer}
+
+/* ---------- quiz ---------- */
+.qopt{display:block;width:100%;text-align:left;font-family:var(--mono);font-size:12.5px;
+  padding:11px 13px;margin-bottom:7px;border-radius:8px;border:1px solid var(--line);
+  background:var(--panel2);color:var(--txt);cursor:pointer;min-height:42px}
+.qopt.ok{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,.08)}
+.qopt.bad{border-color:#ff5370;color:#ff5370;background:rgba(255,83,112,.08)}
+#quizScore{font-family:var(--mono);font-size:11px;color:var(--dim)}
+#quizNext{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:9px 16px;border-radius:8px;
+  border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);cursor:pointer;min-height:40px}
 </style>
 </head>
 <body>
@@ -228,6 +266,11 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
 
 <main>
   <section id="tableView">
+    <div id="toolsRow">
+      <input id="searchBox" type="search" placeholder="search… (si · gallium · 49)" autocomplete="off">
+      <button id="sizeBtn" aria-label="table density">M</button>
+    </div>
+    <div id="quickRow" style="display:none"></div>
     <div id="semiPanel"></div>
     <div id="tableWrap"><div id="ptable" role="grid" aria-label="Periodic table"></div></div>
     <div id="legend"></div>
@@ -241,6 +284,7 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
 <div id="sheet" role="dialog" aria-modal="true">
   <div class="grab"></div>
   <div class="sheet-head">
+    <button id="favBtn" aria-label="toggle favourite">☆</button>
     <div class="shellbox" id="shellBox"></div>
     <div class="head-meta">
       <h2 id="shName"></h2>
@@ -255,6 +299,8 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
   </div>
   <div class="sheet-body" id="sheetBody"></div>
 </div>
+
+<div id="updBanner" hidden>⟳ Update available<button id="updReload">RELOAD</button></div>
 
 <nav>
   <button id="navTable" class="act" data-view="table"><span class="ic">⊞</span>TABLE</button>
@@ -624,9 +670,14 @@ function openSheet(e){
   document.getElementById('shShells').textContent='shells '+ec.shells.join(' · ');
   renderTab();
   sheet.classList.add('open');backdrop.classList.add('show');
+  recents=[e.z,...recents.filter(z=>z!==e.z)].slice(0,8);save('sshet-recents',recents);
+  renderQuick();
+  document.getElementById('favBtn').textContent=favs.includes(e.z)?'★':'☆';
+  try{history.replaceState(null,'','#e='+e.z)}catch(_){}
 }
 function closeSheet(){sheet.classList.remove('open');backdrop.classList.remove('show');
-  document.querySelectorAll('.cell.selected').forEach(c=>c.classList.remove('selected'));}
+  document.querySelectorAll('.cell.selected').forEach(c=>c.classList.remove('selected'));
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}}
 backdrop.addEventListener('click',closeSheet);
 tabData.addEventListener('click',()=>{curTab='data';renderTab()});
 tabPhys.addEventListener('click',()=>{curTab='phys';renderTab()});
@@ -805,6 +856,29 @@ physView.innerHTML=`
   <div class="sub" style="margin-top:8px">Try λ = 13.5 nm, NA = 0.33 for EUV · λ = 193, NA = 1.35 for immersion ArF.</div>
 </div>
 <div class="pcard">
+  <h2>PHOTON ENERGY ⇄ WAVELENGTH</h2>
+  <div class="sub">Edit either field — the other follows. The fundamental link between band gaps and optics.</div>
+  <div class="formula">E (eV) = 1239.84 / λ (nm)</div>
+  <div class="inrow">
+    <label>E energy (eV)<input id="cvE" type="number" step="0.01" value="0.80" inputmode="decimal"></label>
+    <label>λ wavelength (nm)<input id="cvL" type="number" step="1" value="1550" inputmode="decimal"></label>
+  </div>
+  <div class="result" id="cvOut"></div>
+  <div class="sub" style="margin-top:8px">Landmarks: 1550 nm = 0.80 eV (telecom C-band) · 1310 nm = 0.95 eV · Si edge 1.12 eV = 1107 nm · GaN 3.39 eV = 366 nm.</div>
+</div>
+<div class="pcard">
+  <h2>TERNARY ALLOY DESIGNER · VEGARD + BOWING</h2>
+  <div class="sub">Slide the composition x and watch the band gap and lattice constant interpolate between the binaries.</div>
+  <div class="inrow">
+    <label>alloy<select id="vgMat">
+      <option value="InGaAs" selected>InₓGa₁₋ₓAs (GaAs → InAs)</option>
+      <option value="AlGaAs">AlₓGa₁₋ₓAs (GaAs → AlAs)</option></select></label>
+  </div>
+  <label style="font-size:10px;color:var(--dim);font-family:var(--mono)">composition x = <span id="vgXv">0.53</span>
+    <input id="vgX" type="range" min="0" max="1" step="0.01" value="0.53"></label>
+  <div class="result" id="vgOut" style="margin-top:8px"></div>
+</div>
+<div class="pcard">
   <h2>INTRINSIC CARRIER CONCENTRATION</h2>
   <div class="sub">Thermally generated electron–hole pairs in a pure semiconductor.</div>
   <div class="formula">nᵢ = √(N꜀Nᵥ) · exp(−E𝗀 / 2k᙭T)</div>
@@ -817,6 +891,22 @@ physView.innerHTML=`
   <label style="font-size:10px;color:var(--dim);font-family:var(--mono)">temperature <span id="ccTv">300</span> K
     <input id="ccT" type="range" min="200" max="600" step="5" value="300"></label>
   <div class="result" id="ccOut" style="margin-top:8px"></div>
+  <svg id="arrSvg" viewBox="0 0 320 180" width="100%" style="margin-top:10px" aria-label="Arrhenius plot of intrinsic carrier concentration"></svg>
+  <div class="hint">Arrhenius view: log₁₀ nᵢ vs 1000/T — slope ∝ −E𝗀/2k᙭ · dot = current setting</div>
+</div>
+<div class="pcard">
+  <h2>DOPING & FERMI LEVEL</h2>
+  <div class="sub">Full ionisation, Boltzmann statistics: n ≈ N_D, p = nᵢ²/n, E꜀−E_F = k᙭T·ln(N꜀/n).</div>
+  <div class="inrow">
+    <label>material<select id="dpMat">
+      <option value="Si" selected>Si</option><option value="Ge">Ge</option>
+      <option value="GaAs">GaAs</option><option value="InP">InP</option><option value="GaN">GaN</option></select></label>
+    <label>dopant type<select id="dpType">
+      <option value="d" selected>donor (n-type)</option><option value="a">acceptor (p-type)</option></select></label>
+  </div>
+  <label style="font-size:10px;color:var(--dim);font-family:var(--mono)">concentration N = 10^<span id="dpNv">16</span> cm⁻³
+    <input id="dpN" type="range" min="13" max="20" step="0.1" value="16"></label>
+  <div class="result" id="dpOut" style="margin-top:8px"></div>
 </div>
 <div class="pcard">
   <h2>CRYSTAL STRUCTURE VIEWER</h2>
@@ -829,6 +919,17 @@ physView.innerHTML=`
   <svg id="xtalSvg" class="xtal3d" viewBox="0 0 300 280" width="300" height="280" aria-label="crystal structure"></svg>
   <div class="hint">⟲ drag to rotate</div>
   <div id="xtalCaption"></div>
+</div>
+<div class="pcard">
+  <h2>BAND DIAGRAMS · E vs k</h2>
+  <div class="sub">Schematic band structure along L–Γ–X. The lowest conduction valley decides direct (Γ, vertical
+  transition, cyan) vs indirect (L or X, phonon-assisted, amber) — and whether a material can lase.</div>
+  <div class="xtalbtns" id="bandBtns">
+    <button data-m="Si" class="act">Si</button><button data-m="Ge">Ge</button>
+    <button data-m="GaAs">GaAs</button><button data-m="InP">InP</button>
+  </div>
+  <svg id="bandSvg" viewBox="0 0 320 250" width="100%" style="max-width:380px;display:block;margin:0 auto" aria-label="band diagram"></svg>
+  <div id="bandCaption" class="hint"></div>
 </div>
 <div class="pcard">
   <h2>KEY FORMULAS</h2>
@@ -853,6 +954,15 @@ physView.innerHTML=`
       <text x="230" y="35" fill="#ff6b35" font-size="9" font-family="monospace">T = 0</text>
       <text x="230" y="48" fill="#00e5ff" font-size="9" font-family="monospace">T &gt; 0</text>
     </svg>
+  </div>
+</div>
+<div class="pcard">
+  <h2>QUIZ · TEST YOURSELF</h2>
+  <div class="sub" id="quizQ"></div>
+  <div id="quizOpts"></div>
+  <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+    <span id="quizScore"></span>
+    <button id="quizNext" style="margin-left:auto">NEXT →</button>
   </div>
 </div>`;
 
@@ -888,17 +998,209 @@ function calcRay(){
 const NI_MAT={Si:{Eg:1.12,ni300:1.0e10},Ge:{Eg:0.66,ni300:2.0e13},GaAs:{Eg:1.424,ni300:2.1e6},
   InP:{Eg:1.344,ni300:1.3e7},GaN:{Eg:3.39,ni300:1.9e-10}};
 const KB=8.617333e-5;
-function calcNi(){
-  const m=NI_MAT[document.getElementById('ccMat').value],T=+document.getElementById('ccT').value;
-  document.getElementById('ccTv').textContent=T;
+function niCalc(m,T){
   const C=m.ni300/(Math.pow(300,1.5)*Math.exp(-m.Eg/(2*KB*300)));
-  const ni=C*Math.pow(T,1.5)*Math.exp(-m.Eg/(2*KB*T));
-  const ex=Math.floor(Math.log10(ni)),man=ni/Math.pow(10,ex);
+  return C*Math.pow(T,1.5)*Math.exp(-m.Eg/(2*KB*T));
+}
+function sciHTML(v){
+  if(v<=0||!isFinite(v))return'—';
+  const ex=Math.floor(Math.log10(v)),man=v/Math.pow(10,ex);
+  return`${man.toFixed(2)} × 10${sup(ex)}`;
+}
+function drawArr(curMat,curT){
+  const svg=document.getElementById('arrSvg');if(!svg)return;
+  const L=44,R=12,T0=10,B=34,W=320,H=180;
+  const xu=u=>L+(u-1.6)/(5-1.6)*(W-L-R),yl=lg=>T0+(16-lg)/(16-(-12))*(H-T0-B);
+  let s='';
+  for(const lg of[-10,-5,0,5,10,15])s+=`<line x1="${L}" y1="${yl(lg)}" x2="${W-R}" y2="${yl(lg)}" stroke="var(--line)" stroke-width="0.4"/>
+    <text x="${L-5}" y="${yl(lg)+3}" font-size="8" text-anchor="end" fill="var(--dim)" font-family="monospace">${lg}</text>`;
+  for(const u of[2,3,4,5])s+=`<text x="${xu(u)}" y="${H-B+12}" font-size="8" text-anchor="middle" fill="var(--dim)" font-family="monospace">${u}</text>`;
+  s+=`<text x="${(L+W-R)/2}" y="${H-6}" font-size="9" text-anchor="middle" fill="var(--dim)" font-family="monospace">1000/T (K⁻¹)</text>
+  <text x="10" y="${(T0+H-B)/2}" font-size="9" text-anchor="middle" fill="var(--dim)" font-family="monospace" transform="rotate(-90 10 ${(T0+H-B)/2})">log₁₀ nᵢ (cm⁻³)</text>`;
+  for(const[name,m]of Object.entries(NI_MAT)){
+    if(name==='GaN')continue;
+    const pts=[];
+    for(let T=200;T<=625;T+=12){
+      const lg=Math.log10(niCalc(m,T));
+      if(lg<-12)continue;
+      pts.push(`${xu(1000/T).toFixed(1)},${yl(lg).toFixed(1)}`);
+    }
+    const cur=name===curMat;
+    s+=`<path d="M${pts.join(' L')}" fill="none" stroke="${cur?'var(--cyan)':'var(--dim)'}" stroke-width="${cur?2:0.9}" stroke-opacity="${cur?1:0.55}"/>`;
+    if(pts.length){const[px,py]=pts[0].split(',');
+      s+=`<text x="${+px+3}" y="${py}" font-size="8.5" fill="${cur?'var(--cyan)':'var(--dim)'}" font-family="monospace">${name}</text>`;}
+  }
+  const mc=NI_MAT[curMat],lgc=Math.log10(niCalc(mc,curT));
+  if(lgc>-12)s+=`<circle cx="${xu(1000/curT)}" cy="${yl(lgc)}" r="4.5" fill="var(--amber)"/>`;
+  svg.innerHTML=s;
+}
+function calcNi(){
+  const name=document.getElementById('ccMat').value,m=NI_MAT[name],
+    T=+document.getElementById('ccT').value;
+  document.getElementById('ccTv').textContent=T;
   document.getElementById('ccOut').innerHTML=
-    `nᵢ ≈ <b>${man.toFixed(2)} × 10${sup(ex)}</b> cm⁻³ <small>at ${T} K · E𝗀 = ${m.Eg} eV (assumed T-independent)</small>`;
+    `nᵢ ≈ <b>${sciHTML(niCalc(m,T))}</b> cm⁻³ <small>at ${T} K · E𝗀 = ${m.Eg} eV (assumed T-independent)</small>`;
+  drawArr(name,T);
 }
 document.getElementById('ccMat').addEventListener('change',calcNi);
 document.getElementById('ccT').addEventListener('input',calcNi);
+
+/* photon energy ⇄ wavelength */
+function cvShow(E){
+  const band=E<1.65?'infrared':E<3.27?'visible':'ultraviolet';
+  document.getElementById('cvOut').innerHTML=
+    `ν = <b>${(E*241.799).toFixed(1)} THz</b> &nbsp;·&nbsp; ${band} <small>· a semiconductor absorbs light with E ≥ E𝗀</small>`;
+}
+document.getElementById('cvE').addEventListener('input',()=>{
+  const E=+document.getElementById('cvE').value;if(!E||E<=0)return;
+  document.getElementById('cvL').value=(1239.84/E).toFixed(0);cvShow(E);
+});
+document.getElementById('cvL').addEventListener('input',()=>{
+  const L=+document.getElementById('cvL').value;if(!L||L<=0)return;
+  const E=1239.84/L;
+  document.getElementById('cvE').value=E.toFixed(3);cvShow(E);
+});
+
+/* ternary alloy designer (Vegard + bowing, 300 K) */
+function calcVegard(){
+  const mat=document.getElementById('vgMat').value,x=+document.getElementById('vgX').value;
+  document.getElementById('vgXv').textContent=x.toFixed(2);
+  let Eg,a,direct,note='';
+  if(mat==='InGaAs'){
+    Eg=1.424-1.615*x+0.555*x*x;
+    a=5.6533+0.4054*x;
+    direct=true;
+    const mm=((a-5.8688)/5.8688*100);
+    note=`lattice mismatch to InP: ${mm>0?'+':''}${mm.toFixed(2)}%${Math.abs(mm)<0.1?' — <b>lattice-matched ✓</b>':''}`;
+  }else{
+    direct=x<0.45;
+    Eg=direct?1.424+1.247*x:1.911+0.005*x+0.245*x*x;
+    a=5.6533+0.0078*x;
+    note=`mismatch to GaAs: +${((a-5.6533)/5.6533*100).toFixed(3)}% — strain-free DBRs at any x`;
+  }
+  document.getElementById('vgOut').innerHTML=
+    `E𝗀 = <b>${Eg.toFixed(3)} eV</b> <span class="dirchip ${direct?'d':'i'}">${direct?'DIRECT':'INDIRECT'}</span>
+     &nbsp;·&nbsp; λ𝗀 = ${(1239.84/Eg).toFixed(0)} nm &nbsp;·&nbsp; a = ${a.toFixed(4)} Å<br>
+     <small>${note}</small>`;
+}
+document.getElementById('vgMat').addEventListener('change',calcVegard);
+document.getElementById('vgX').addEventListener('input',calcVegard);
+
+/* doping & Fermi level */
+const DOPE={Si:{Nc:2.8e19,Nv:1.04e19,mu:[1400,450]},Ge:{Nc:1.04e19,Nv:6.0e18,mu:[3900,1900]},
+  GaAs:{Nc:4.7e17,Nv:7.0e18,mu:[8500,400]},InP:{Nc:5.7e17,Nv:1.1e19,mu:[5400,200]},
+  GaN:{Nc:2.3e18,Nv:4.6e19,mu:[1200,30]}};
+function calcDope(){
+  const name=document.getElementById('dpMat').value,typ=document.getElementById('dpType').value,
+    s=+document.getElementById('dpN').value,N=Math.pow(10,s),
+    d=DOPE[name],m=NI_MAT[name],kT=KB*300,ni=niCalc(m,300);
+  document.getElementById('dpNv').textContent=s.toFixed(1);
+  const maj=N,min=ni*ni/N;
+  const ef=typ==='d'?kT*Math.log(d.Nc/maj):kT*Math.log(d.Nv/maj);
+  const mu=typ==='d'?d.mu[0]:d.mu[1];
+  const rho=1/(1.602e-19*maj*mu);
+  const deg=ef<3*kT?' <small style="color:var(--amber)">⚠ degenerate — Boltzmann approx. breaking down</small>':'';
+  document.getElementById('dpOut').innerHTML=
+    (typ==='d'
+      ?`n ≈ <b>${sciHTML(maj)}</b> cm⁻³ · p = ${sciHTML(min)} cm⁻³<br>E꜀ − E_F = <b>${(ef*1000).toFixed(0)} meV</b>${deg}`
+      :`p ≈ <b>${sciHTML(maj)}</b> cm⁻³ · n = ${sciHTML(min)} cm⁻³<br>E_F − Eᵥ = <b>${(ef*1000).toFixed(0)} meV</b>${deg}`)+
+    `<br>ρ ≈ <b>${rho.toPrecision(3)} Ω·cm</b> <small>(μ = ${mu} cm²/V·s, full ionisation, 300 K)</small>`;
+}
+['dpMat','dpType'].forEach(id=>document.getElementById(id).addEventListener('change',calcDope));
+document.getElementById('dpN').addEventListener('input',calcDope);
+
+/* band diagrams E vs k (schematic) */
+const BANDK={
+ Si:{L:2.0,G:3.4,X:1.12,min:'X',cap:'Si — indirect: CB minimum near X. No efficient light emission; perfect for logic.'},
+ Ge:{L:0.66,G:0.80,X:1.20,min:'L',cap:'Ge — indirect (L), but the Γ valley is only 0.14 eV above: strained Ge can lase.'},
+ GaAs:{L:1.71,G:1.42,X:1.90,min:'G',cap:'GaAs — direct at Γ: efficient emitter for LEDs, VCSELs and laser diodes.'},
+ InP:{L:1.93,G:1.34,X:2.19,min:'G',cap:'InP — direct at Γ: the substrate of 1310/1550 nm telecom photonics.'}};
+function drawBandK(mat){
+  const d=BANDK[mat],KX={L:55,G:160,X:265},ey=E=>200-E*42;
+  const para=(cx,E0,curv,w,up)=>{
+    const pts=[];
+    for(let dx=-w;dx<=w;dx+=6)
+      pts.push(`${cx+dx},${ey(E0+(up?1:-1)*curv*(dx/w)*(dx/w)).toFixed(1)}`);
+    return`M${pts.join(' L')}`;
+  };
+  let s=`<line x1="20" y1="${ey(0)}" x2="300" y2="${ey(0)}" stroke="var(--line)" stroke-width="0.6" stroke-dasharray="2 4"/>`;
+  for(const[k,cx]of Object.entries(KX)){
+    s+=`<text x="${cx}" y="242" font-size="11" text-anchor="middle" fill="var(--dim)" font-family="monospace">${k==='G'?'Γ':k}</text>
+    <path d="${para(cx,d[k],0.95,42,true)}" fill="none" stroke="#00e5ff" stroke-width="1.8" stroke-opacity="${k===d.min?1:0.45}"/>`;
+  }
+  s+=`<path d="${para(160,0,0.9,62,false)}" fill="none" stroke="#ff6b35" stroke-width="1.8"/>
+      <path d="${para(160,0,1.7,62,false)}" fill="none" stroke="#ff6b35" stroke-width="1.2" stroke-opacity="0.5"/>`;
+  const tx=KX[d.min],ty=ey(d[d.min]),direct=d.min==='G';
+  s+=`<line x1="160" y1="${ey(0)}" x2="${tx}" y2="${ty}" stroke="${direct?'#00e5ff':'#ffd166'}" stroke-width="1.4" stroke-dasharray="4 3"/>
+   <circle cx="${tx}" cy="${ty}" r="3.5" fill="${direct?'#00e5ff':'#ffd166'}"/>
+   <circle cx="160" cy="${ey(0)}" r="3.5" fill="#ff6b35"/>
+   <text x="${(160+tx)/2+(direct?8:0)}" y="${(ey(0)+ty)/2-6}" font-size="10" fill="${direct?'#00e5ff':'#ffd166'}" font-family="monospace">${d[d.min]} eV ${direct?'(direct)':'(indirect)'}</text>
+   <text x="24" y="${ey(0)-6}" font-size="9" fill="#ff6b35" font-family="monospace">VB (hh/lh)</text>
+   <text x="24" y="${ey(d.G)>60?40:24}" font-size="9" fill="#00e5ff" font-family="monospace">CB valleys</text>
+   <text x="305" y="${ey(0)+4}" font-size="9" fill="var(--dim)" font-family="monospace">k→</text>`;
+  document.getElementById('bandSvg').innerHTML=s;
+  document.getElementById('bandCaption').textContent=d.cap;
+}
+document.getElementById('bandBtns').addEventListener('click',ev=>{
+  const b=ev.target.closest('button');if(!b)return;
+  document.querySelectorAll('#bandBtns button').forEach(x=>x.classList.toggle('act',x===b));
+  drawBandK(b.dataset.m);
+});
+
+/* quiz */
+let quizScore=0,quizTotal=0,quizStreak=0,quizAns=false;
+function rnd(n){return Math.floor(Math.random()*n)}
+function pick(a){return a[rnd(a.length)]}
+function shuffled(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=rnd(i+1);[b[i],b[j]]=[b[j],b[i]]}return b}
+const QUIZ_POOL=ELEMENTS.filter(e=>e.z<=92);
+const QUIZ_FAMOUS=[1,3,6,8,13,14,15,22,24,26,27,28,29,30,31,32,33,34,47,49,50,74,79,82,83].map(z=>ELEMENTS[z-1]);
+function genQuiz(){
+  const t=rnd(5);
+  if(t===0){
+    const e=pick(QUIZ_POOL),wrong=new Set();
+    while(wrong.size<3){const w=pick(QUIZ_POOL).name;if(w!==e.name)wrong.add(w)}
+    return{q:`Which element has the symbol “${e.symbol}”?`,correct:e.name,opts:shuffled([e.name,...wrong])};
+  }
+  if(t===1){
+    const cand=QUIZ_FAMOUS.filter(e=>['FCC','BCC','HCP','DC'].includes(e.crystalStructure));
+    const e=pick(cand),names=['FCC','BCC','HCP','DC'].map(k=>XTALS[k][0]);
+    return{q:`Crystal structure of ${e.name}?`,correct:XTALS[e.crystalStructure][0],opts:shuffled(names)};
+  }
+  if(t===2){
+    const mats=[{f:'Si',bg:1.12},{f:'Ge',bg:0.66},...COMPOUNDS.map(c=>({f:c.f,bg:c.bg}))];
+    const m=pick(mats),wrong=new Set();
+    while(wrong.size<3){const w=pick(mats).bg+' eV';if(w!==m.bg+' eV')wrong.add(w)}
+    return{q:`Band gap of ${m.f} at 300 K?`,correct:m.bg+' eV',opts:shuffled([m.bg+' eV',...wrong])};
+  }
+  if(t===3){
+    const e=pick(QUIZ_FAMOUS.filter(x=>x.bandType&&x.bandType!=='U'));
+    return{q:`Electrically, ${e.name} is a …?`,correct:BANDTYPE[e.bandType][0],
+      opts:shuffled(Object.values(BANDTYPE).slice(0,4).map(b=>b[0]))};
+  }
+  const e=pick(QUIZ_FAMOUS.filter(x=>MAG[x.z]));
+  return{q:`Magnetic ordering of ${e.name}?`,correct:MAGCLS[MAG[e.z][0]][0],
+    opts:shuffled(Object.values(MAGCLS).map(m=>m[0]))};
+}
+function quizNext(){
+  const Q=genQuiz();quizAns=false;
+  document.getElementById('quizQ').textContent=Q.q;
+  document.getElementById('quizOpts').innerHTML=
+    Q.opts.map(o=>`<button class="qopt" data-v="${o}">${o}</button>`).join('');
+  document.getElementById('quizOpts').querySelectorAll('.qopt').forEach(b=>
+    b.addEventListener('click',()=>{
+      if(quizAns)return;quizAns=true;quizTotal++;
+      const right=b.dataset.v===Q.correct;
+      if(right){quizScore++;quizStreak++;b.classList.add('ok');}
+      else{quizStreak=0;b.classList.add('bad');
+        document.getElementById('quizOpts').querySelectorAll('.qopt')
+          .forEach(x=>{if(x.dataset.v===Q.correct)x.classList.add('ok')});}
+      document.getElementById('quizScore').textContent=
+        `score ${quizScore}/${quizTotal} · streak ${quizStreak}`;
+    }));
+  document.getElementById('quizScore').textContent=
+    quizTotal?`score ${quizScore}/${quizTotal} · streak ${quizStreak}`:'answer to start scoring';
+}
+document.getElementById('quizNext').addEventListener('click',quizNext);
 
 /* ---------- interactive 3D crystal structure engine ----------
    orthographic projection with drag-to-rotate (pointer events) */
@@ -1131,6 +1433,59 @@ function renderMap(){
   });
 }
 
+/* ---------- favourites & recents ---------- */
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(_){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}
+let favs=load('sshet-favs',[]),recents=load('sshet-recents',[]);
+const quickRow=document.getElementById('quickRow');
+function renderQuick(){
+  const items=[...favs.map(z=>({z,f:1})),...recents.filter(z=>!favs.includes(z)).map(z=>({z,f:0}))];
+  quickRow.style.display=items.length?'':'none';
+  quickRow.innerHTML=items.map(it=>
+    `<button class="qchip${it.f?' fav':''}" data-z="${it.z}">${it.f?'★ ':''}${ELEMENTS[it.z-1].symbol} · ${ELEMENTS[it.z-1].name}</button>`).join('');
+}
+quickRow.addEventListener('click',ev=>{
+  const b=ev.target.closest('.qchip');if(b)openSheet(ELEMENTS[+b.dataset.z-1]);
+});
+document.getElementById('favBtn').addEventListener('click',()=>{
+  if(!curElem)return;
+  const z=curElem.z;
+  favs=favs.includes(z)?favs.filter(x=>x!==z):[...favs,z];
+  save('sshet-favs',favs);
+  document.getElementById('favBtn').textContent=favs.includes(z)?'★':'☆';
+  renderQuick();
+});
+
+/* ---------- element search ---------- */
+const searchBox=document.getElementById('searchBox');
+function searchMatches(q){
+  return ELEMENTS.filter(e=>e.symbol.toLowerCase().startsWith(q)||
+    e.name.toLowerCase().includes(q)||String(e.z)===q);
+}
+searchBox.addEventListener('input',()=>{
+  const q=searchBox.value.trim().toLowerCase();
+  const hit=q?new Set(searchMatches(q).map(e=>e.z)):null;
+  document.querySelectorAll('.cell').forEach(c=>
+    c.classList.toggle('searchdim',!!hit&&!hit.has(+c.dataset.z)));
+});
+searchBox.addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter')return;
+  const m=searchMatches(searchBox.value.trim().toLowerCase());
+  if(m.length){openSheet(m[0]);searchBox.blur();}
+});
+
+/* ---------- table density ---------- */
+const SIZES=['','size-s','size-l'],SIZE_LBL=['M','S','L'];
+let sizeIdx=+load('sshet-size',0)||0;
+function applySize(){
+  ptable.className=SIZES[sizeIdx];
+  document.getElementById('sizeBtn').textContent=SIZE_LBL[sizeIdx];
+  save('sshet-size',sizeIdx);
+}
+document.getElementById('sizeBtn').addEventListener('click',()=>{
+  sizeIdx=(sizeIdx+1)%3;applySize();
+});
+
 /* ---------- bottom nav ---------- */
 const tableView=document.getElementById('tableView');
 const VIEWS={table:tableView,phys:physView,cmp:cmpView,map:document.getElementById('mapView')};
@@ -1141,6 +1496,7 @@ function showView(v){
     else el.classList.toggle('show',k===v);
   }
   closeSheet();
+  if(v!=='table')try{history.replaceState(null,'','#v='+v)}catch(_){}
 }
 document.querySelector('nav').addEventListener('click',ev=>{
   const b=ev.target.closest('button');if(b)showView(b.dataset.view);
@@ -1148,10 +1504,19 @@ document.querySelector('nav').addEventListener('click',ev=>{
 
 /* ---------- init ---------- */
 buildTable();
-calcBragg();calcRay();calcNi();
+calcBragg();calcRay();calcNi();calcVegard();calcDope();cvShow(0.80);
 physXtal=initXtal3d(document.getElementById('xtalSvg'),'FCC');
 document.getElementById('xtalCaption').textContent=STRUCTS.FCC.cap;
-renderCompare();renderMap();
+drawBandK('Si');quizNext();
+renderCompare();renderMap();renderQuick();applySize();
+/* deep links: #e=49 opens an element, #v=phys|cmp|map opens a view */
+(function(){
+  const h=location.hash;
+  let m=h.match(/^#e=(\d+)$/);
+  if(m&&+m[1]>=1&&+m[1]<=118){openSheet(ELEMENTS[+m[1]-1]);return;}
+  m=h.match(/^#v=(phys|cmp|map)$/);
+  if(m)showView(m[1]);
+})();
 
 /* swipe-down to close sheet */
 let tY=null;
@@ -1160,9 +1525,18 @@ sheet.addEventListener('touchend',e=>{
   if(tY!=null&&e.changedTouches[0].clientY-tY>70&&sheet.scrollTop<=0)closeSheet();tY=null;},{passive:true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
 
-/* ---------- service worker ---------- */
+/* ---------- service worker + update notification ---------- */
+document.getElementById('updReload').addEventListener('click',()=>location.reload());
 if('serviceWorker'in navigator)
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').then(reg=>{
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;if(!nw)return;
+      nw.addEventListener('statechange',()=>{
+        if(nw.state==='activated'&&navigator.serviceWorker.controller)
+          document.getElementById('updBanner').hidden=false;
+      });
+    });
+  }).catch(()=>{}));
 </script>
 </body>
 </html>
