@@ -21,7 +21,7 @@
   --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --c-ak:#ff5370; --c-ae:#ffb74d; --c-tm:#ff6b35; --c-pt:#e0a458;
   --c-md:#00e5ff; --c-nm:#66e08a; --c-ha:#b388ff; --c-ng:#c792ea;
-  --c-la:#5ed4b0; --c-ac:#8aa6ff;
+  --c-la:#5ed4b0; --c-ac:#8aa6ff; --cellfg:#f4f8ff; --rad:#ffd84d;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--txt);font-family:var(--sans);overscroll-behavior-y:none}
@@ -31,6 +31,8 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;z-index:30;background:rgba(10,14,26,.92);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 12px 8px;
   display:flex;align-items:center;gap:10px}
+header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--amber),transparent);opacity:.65}
 header h1{font-family:var(--mono);font-size:15px;letter-spacing:.18em;font-weight:600;color:var(--cyan);flex:1}
 header h1 small{color:var(--dim);letter-spacing:.1em;font-weight:400}
 #semiToggle{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:7px 12px;border-radius:7px;
@@ -42,21 +44,29 @@ header h1 small{color:var(--dim);letter-spacing:.1em;font-weight:400}
 #tableWrap{overflow-x:auto;padding:10px 8px 4px;-webkit-overflow-scrolling:touch}
 #ptable{display:grid;grid-template-columns:repeat(18,minmax(44px,1fr));
   grid-auto-rows:minmax(48px,auto);gap:3px;min-width:858px;padding-bottom:6px}
-.cell{position:relative;border:1px solid var(--line);border-radius:6px;background:var(--panel);
-  min-height:48px;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  cursor:pointer;transition:opacity .25s,box-shadow .2s,border-color .2s;color:var(--txt);font-family:var(--mono)}
-.cell .z{position:absolute;top:2px;left:4px;font-size:8px;color:var(--dim)}
-.cell .sym{font-size:15px;font-weight:700;line-height:1}
-.cell .nm{font-size:7px;color:var(--dim);margin-top:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cell{border-bottom:2px solid var(--cat,var(--line))}
-.cell .sym{color:var(--cat,var(--txt))}
-.cell:active,.cell.selected{box-shadow:0 0 14px var(--cat),inset 0 0 8px rgba(255,255,255,.04);border-color:var(--cat)}
-.cell.dim{opacity:.13;pointer-events:auto}
+.cell{position:relative;border:1px solid color-mix(in srgb,var(--cat) 50%,var(--line));border-radius:7px;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--cat) 30%,var(--panel)),color-mix(in srgb,var(--cat) 13%,var(--panel)));
+  min-height:48px;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
+  cursor:pointer;transition:transform .12s,opacity .25s,box-shadow .2s,border-color .2s,background .2s;font-family:var(--mono)}
+.cell .z{position:absolute;top:2px;left:4px;font-size:8px;z-index:1;color:color-mix(in srgb,var(--cat) 45%,var(--txt))}
+.cell .sym{font-size:16px;font-weight:800;line-height:1;z-index:1;color:var(--cellfg);text-shadow:0 1px 3px rgba(0,0,0,.45)}
+.cell .nm{font-size:7px;margin-top:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;z-index:1;
+  color:color-mix(in srgb,var(--cat) 22%,var(--txt))}
+.cell .ra{position:absolute;top:1px;right:3px;font-size:8px;z-index:1;color:#fff5cc;
+  animation:radpulse 2.2s ease-in-out infinite}
+@keyframes radpulse{0%,100%{opacity:.4}50%{opacity:1;text-shadow:0 0 7px #ffe14d}}
+.cell:active{transform:scale(.95)}
+.cell:active,.cell.selected{box-shadow:0 0 18px var(--cat),inset 0 0 14px rgba(255,255,255,.1);border-color:var(--cat)}
+.cell.selected{background:linear-gradient(155deg,color-mix(in srgb,var(--cat) 48%,var(--panel)),color-mix(in srgb,var(--cat) 24%,var(--panel)))}
+html[data-theme=light] .cell .sym{text-shadow:none}
+.cell.dim{opacity:.12;pointer-events:auto}
 .gap-label{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;
   color:var(--dim);border:1px dashed var(--line);border-radius:6px}
-#legend{display:flex;flex-wrap:wrap;gap:6px 12px;padding:8px 14px 14px;font-size:10px;color:var(--dim);font-family:var(--mono)}
-#legend span{display:inline-flex;align-items:center;gap:5px}
-#legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+#legend{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px 16px;font-size:10px;font-family:var(--mono)}
+#legend span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;color:var(--txt);
+  border:1px solid color-mix(in srgb,var(--lc,var(--line)) 50%,var(--line));
+  background:color-mix(in srgb,var(--lc,var(--line)) 15%,var(--panel))}
+#legend i{width:10px;height:10px;border-radius:50%;display:inline-block;box-shadow:0 0 5px var(--lc,transparent)}
 
 /* ---------- semiconductor focus panel ---------- */
 #semiPanel{display:none;margin:4px 12px 12px;border:1px solid rgba(0,229,255,.35);border-radius:12px;
@@ -156,7 +166,7 @@ nav button.act{color:var(--cyan)}
 html[data-theme=light]{--bg:#edf1f8;--panel:#ffffff;--panel2:#f2f5fb;--line:#c8d3e6;--txt:#15203a;
   --dim:#5b6b8f;--cyan:#007a9c;--amber:#cf4f1a;
   --c-ak:#d23a55;--c-ae:#c97f17;--c-tm:#cf4f1a;--c-pt:#a8731c;--c-md:#007a9c;--c-nm:#1d9450;
-  --c-ha:#7448cc;--c-ng:#9438bf;--c-la:#168f6e;--c-ac:#4358cc}
+  --c-ha:#7448cc;--c-ng:#9438bf;--c-la:#168f6e;--c-ac:#4358cc;--cellfg:#0e1830;--rad:#b8860b}
 html[data-theme=light] body{background:var(--bg)}
 html[data-theme=light] header{background:rgba(237,241,248,.93)}
 html[data-theme=light] nav{background:rgba(255,255,255,.96)}
@@ -186,6 +196,11 @@ html[data-theme=light] #backdrop{background:rgba(30,40,70,.35)}
   color:var(--txt);background:var(--panel2)}
 .magbadge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
   padding:5px 10px;border-radius:6px;border:1px solid;margin:4px 0 6px}
+.rabadge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  padding:5px 10px;border-radius:6px;border:1px solid var(--rad);color:var(--rad);
+  background:color-mix(in srgb,var(--rad) 12%,transparent);margin:4px 0 6px}
+.ranote{margin-top:6px;padding:11px 13px;border-left:3px solid var(--rad);border-radius:0 9px 9px 0;
+  background:var(--panel2);font-size:12.5px;line-height:1.55}
 .hint{font-size:9.5px;color:var(--dim);font-family:var(--mono);text-align:center;margin-top:4px}
 .why{margin-top:6px;padding:12px 14px;border-left:3px solid var(--cyan);border-radius:0 9px 9px 0;
   background:var(--panel2);font-size:13px;line-height:1.6;font-style:italic}
@@ -517,6 +532,48 @@ const MAG={
 const MAGCLS={ferro:['FERROMAGNETIC','#ff5370'],afm:['ANTIFERROMAGNETIC','#ff9d35'],
   para:['PARAMAGNETIC','#ffd166'],dia:['DIAMAGNETIC','#4d9fff']};
 
+/* ---------- radioactivity (elements with NO stable isotope) ----------
+   z: [most stable isotope, half-life, primary decay mode, note]
+   decay: α alpha · β⁻ beta-minus · EC electron capture · SF spontaneous fission · γ gamma */
+const RADIO={
+ 43:['⁹⁸Tc','4.2 million yr','β⁻','First artificially produced element. The metastable ⁹⁹ᵐTc (6 h) is the workhorse isotope of nuclear medicine — ~30 million diagnostic scans a year.'],
+ 61:['¹⁴⁵Pm','17.7 yr','EC','The only radioactive lanthanide. ¹⁴⁷Pm powered luminous dials and betavoltaic nuclear batteries.'],
+ 84:['²⁰⁹Po','125 yr','α','Intensely alpha-active — a single gram emits ~140 W of heat. ²¹⁰Po has served as a lightweight RTG fuel and antistatic source.'],
+ 85:['²¹⁰At','8.1 h','α / EC','The rarest naturally occurring element (≲1 g in the entire crust). ²¹¹At is studied for targeted alpha-particle cancer therapy.'],
+ 86:['²²²Rn','3.82 days','α','A radioactive noble gas and the leading source of natural background radiation dose indoors; a recognised lung-cancer risk.'],
+ 87:['²²³Fr','22 min','β⁻ / α','The most unstable element up to Z = 101; never more than ~30 g exists in the crust at once.'],
+ 88:['²²⁶Ra','1600 yr','α','Historic luminous paint and early cancer therapy. Radium decays into radon — the origin of much indoor radioactivity.'],
+ 89:['²²⁷Ac','21.8 yr','β⁻ / α','²²⁵Ac is a leading isotope for targeted alpha therapy of metastatic cancers.'],
+ 90:['²³²Th','14.0 billion yr','α','Only weakly radioactive and 3–4× more abundant than uranium; a fertile fuel for proposed molten-salt and breeder reactors.'],
+ 91:['²³¹Pa','32 760 yr','α','One of the rarest and most expensive natural elements; used in Pa/Th dating of marine sediments.'],
+ 92:['²³⁸U','4.47 billion yr','α','The primary nuclear fuel: ²³⁵U (0.7%) is fissile. Depleted uranium is used for radiation shielding and ballast.'],
+ 93:['²³⁷Np','2.14 million yr','α','A by-product of reactors and the feedstock for producing ²³⁸Pu.'],
+ 94:['²⁴⁴Pu','80.8 million yr','α','²³⁸Pu fuels deep-space RTGs (Voyager, Curiosity); ²³⁹Pu is fissile and central to nuclear technology.'],
+ 95:['²⁴³Am','7370 yr','α','²⁴¹Am ionises air in household smoke detectors — the most common radioactive source in homes.'],
+ 96:['²⁴⁷Cm','15.6 million yr','α','Powered the alpha-particle X-ray spectrometers on Mars rovers to analyse rock chemistry.'],
+ 97:['²⁴⁷Bk','1380 yr','α','Produced only in microgram amounts; a target material for synthesising superheavy elements (e.g. tennessine).'],
+ 98:['²⁵¹Cf','898 yr','α','²⁵²Cf is an intense neutron emitter used to start reactors and in portable neutron-activation analysis.'],
+ 99:['²⁵²Es','472 days','α','Discovered in the fallout of the first hydrogen-bomb test (1952). Research use only.'],
+ 100:['²⁵⁷Fm','100.5 days','α','The heaviest element reachable by neutron capture; beyond it, only ion-beam synthesis works.'],
+ 101:['²⁵⁸Md','51.5 days','EC / α','Synthetic; produced one atom at a time for research.'],
+ 102:['²⁵⁹No','58 min','α / EC','Synthetic; studied for its unusual +2 oxidation state in solution.'],
+ 103:['²⁶⁶Lr','11 h','α','Last of the actinides; only a few atoms have ever been made.'],
+ 104:['²⁶⁷Rf','1.3 h','SF','First transactinide; chemistry studied atom-by-atom to test relativistic effects.'],
+ 105:['²⁶⁸Db','28 h','SF / α','Superheavy synthetic element; research only.'],
+ 106:['²⁶⁹Sg','14 min','α','Named for Glenn Seaborg; gas-phase chemistry confirms group-6 behaviour.'],
+ 107:['²⁷⁰Bh','61 s','α','Superheavy synthetic element; research only.'],
+ 108:['²⁶⁹Hs','~16 s','α','One of the few superheavy elements with measured chemistry (volatile HsO₄).'],
+ 109:['²⁷⁸Mt','~7 s','α','Superheavy synthetic element; only a handful of atoms ever produced.'],
+ 110:['²⁸¹Ds','~13 s','SF / α','Superheavy synthetic element; research only.'],
+ 111:['²⁸²Rg','~2 min','α','Superheavy synthetic element; research only.'],
+ 112:['²⁸⁵Cn','~28 s','α','Predicted to be a volatile, possibly liquid, metal; chemistry studied atom-by-atom.'],
+ 113:['²⁸⁶Nh','~10 s','α','First element discovered in Asia (RIKEN, Japan).'],
+ 114:['²⁸⁹Fl','~2 s','α','Sits near the predicted "island of stability"; volatility studied for chemistry.'],
+ 115:['²⁹⁰Mc','~0.6 s','α','Superheavy synthetic element; research only.'],
+ 116:['²⁹³Lv','~60 ms','α','Superheavy synthetic element; research only.'],
+ 117:['²⁹⁴Ts','~50 ms','α','Second-rarest element to be synthesised; only a few atoms made.'],
+ 118:['²⁹⁴Og','~0.7 ms','α','Heaviest known element; predicted to behave unlike a typical noble gas.']};
+
 /* ---------- semiconductor role badges ---------- */
 const ROLES={
  3:['Photonics Material (LiNbO₃)'],4:['P-type Dopant (III-V)'],
@@ -632,7 +689,7 @@ function buildTable(){
     b.style.setProperty('--cat',`var(${CATS[e.category][1]})`);
     b.style.gridRow=row;b.style.gridColumn=col;
     b.setAttribute('aria-label',e.name);
-    b.innerHTML=`<span class="z">${e.z}</span><span class="sym">${e.symbol}</span><span class="nm">${e.name}</span>`;
+    b.innerHTML=`<span class="z">${e.z}</span>${RADIO[e.z]?'<span class="ra" aria-label="radioactive">☢</span>':''}<span class="sym">${e.symbol}</span><span class="nm">${e.name}</span>`;
     b.addEventListener('click',()=>openSheet(e));
     frag.appendChild(b);
   }
@@ -642,7 +699,8 @@ function buildTable(){
   }
   ptable.appendChild(frag);
   const lg=document.getElementById('legend');
-  lg.innerHTML=Object.entries(CATS).map(([k,[n,v]])=>`<span><i style="background:var(${v})"></i>${n}</span>`).join('');
+  lg.innerHTML=Object.entries(CATS).map(([k,[n,v]])=>`<span style="--lc:var(${v})"><i style="background:var(${v})"></i>${n}</span>`).join('')
+    +`<span style="--lc:var(--rad)"><i style="background:var(--rad)"></i>☢ Radioactive</span>`;
 }
 
 /* ---------- detail sheet ---------- */
@@ -712,6 +770,17 @@ function eStructure(e,col){
     drow('Orbital occupancy',ec.cfg)+
     `<div class="hint">shells K–Q ↔ principal quantum number n = 1–7 · the highlighted valence shell governs bonding & doping</div>`;
 }
+function radioSection(e){
+  const r=RADIO[e.z];
+  if(!r)return'';
+  const[iso,hl,decay,note]=r;
+  return `<div class="sect">☢ RADIOACTIVITY</div>`+
+    `<span class="rabadge">☢ RADIOACTIVE · no stable isotope</span>`+
+    drow('Most stable isotope',iso)+
+    drow('Half-life',hl,true)+
+    drow('Primary decay',decay)+
+    (note?`<div class="ranote">${note}</div>`:'');
+}
 function magSection(e){
   const m=MAG[e.z];
   if(!m)return drow('Magnetic data','—');
@@ -738,6 +807,8 @@ function renderTab(){
       drow('Boiling point',e.boilingPoint==null?'—':`${e.boilingPoint} K · ${(e.boilingPoint-273.15).toFixed(0)} °C`)+
       drow('Density',fmt(e.density,' g/cm³'))+
       drow('Discovered',e.discoveredYear===0?'Ancient':fmt(e.discoveredYear))+
+      drow('Stability',RADIO[e.z]?`<span style="color:var(--rad)">☢ Radioactive</span>`:`<span style="color:var(--c-nm)">Stable nuclide(s)</span>`)+
+      radioSection(e)+
       eStructure(e,col);
   }else if(curTab==='phys'){
     const x=XTALS[e.crystalStructure||'U'],bt=BANDTYPE[e.bandType||'U'];
@@ -869,6 +940,35 @@ physView.innerHTML=`
   <div class="sub" style="margin-top:8px">Landmarks: 1550 nm = 0.80 eV (telecom C-band) · 1310 nm = 0.95 eV · Si edge 1.12 eV = 1107 nm · GaN 3.39 eV = 366 nm.</div>
 </div>
 <div class="pcard">
+  <h2>☢ RADIOACTIVE DECAY</h2>
+  <div class="sub">How an unstable population shrinks over time — set a half-life and elapsed time to see what remains.</div>
+  <div class="formula">N(t) = N₀ · (½)^(t / t½) &nbsp;·&nbsp; t½ = ln2 / λ</div>
+  <div class="inrow">
+    <label>half-life t½<input id="hlT" type="number" step="any" value="5730" inputmode="decimal"></label>
+    <label>elapsed time t<input id="hlt" type="number" step="any" value="5730" inputmode="decimal"></label>
+    <label>units<select id="hlU">
+      <option value="s">seconds</option><option value="min">minutes</option><option value="h">hours</option>
+      <option value="d">days</option><option value="yr" selected>years</option></select></label>
+  </div>
+  <div class="result" id="hlOut"></div>
+  <div class="sub" style="margin-top:8px">Default: carbon-14 (t½ = 5730 yr) — the basis of radiocarbon dating. Try t = 2 t½ → 25% remains.</div>
+  <div class="sect" style="color:var(--rad)">DECAY MODES</div>
+  <div class="chips">
+    <span class="chip"><b>α</b> alpha — emits a ⁴He nucleus (Z−2, A−4)</span>
+    <span class="chip"><b>β⁻</b> beta — neutron → proton + e⁻ (Z+1)</span>
+    <span class="chip"><b>β⁺ / EC</b> proton → neutron (Z−1)</span>
+    <span class="chip"><b>γ</b> gamma — high-energy photon, no Z change</span>
+    <span class="chip"><b>SF</b> spontaneous fission — nucleus splits</span>
+  </div>
+  <div class="sect" style="color:var(--rad)">DOSE & ACTIVITY UNITS</div>
+  <div class="props">
+    <div class="prop"><div class="pk">ACTIVITY</div><div class="pv">Bq <small>= 1 decay/s · 1 Ci = 3.7×10¹⁰ Bq</small></div></div>
+    <div class="prop"><div class="pk">ABSORBED DOSE</div><div class="pv">Gy <small>= 1 J/kg of tissue</small></div></div>
+    <div class="prop"><div class="pk">EQUIVALENT DOSE</div><div class="pv">Sv <small>= Gy × radiation weight</small></div></div>
+    <div class="prop"><div class="pk">SHIELDING</div><div class="pv">α: paper · β: Al · γ: Pb</div></div>
+  </div>
+</div>
+<div class="pcard">
   <h2>TERNARY ALLOY DESIGNER · VEGARD + BOWING</h2>
   <div class="sub">Slide the composition x and watch the band gap and lattice constant interpolate between the binaries.</div>
   <div class="inrow">
@@ -995,6 +1095,20 @@ function calcRay(){
   out.innerHTML=`d = <b>${(0.61*L/NA).toFixed(1)} nm</b> <small>minimum resolvable half-pitch (k₁ = 0.61)</small>`;
 }
 ['ryL','ryNA'].forEach(id=>document.getElementById(id).addEventListener('input',calcRay));
+
+/* radioactive decay calculator */
+function calcDecay(){
+  const T=+document.getElementById('hlT').value,t=+document.getElementById('hlt').value,
+    u=document.getElementById('hlU').value,out=document.getElementById('hlOut');
+  if(!T||T<=0||t<0||!isFinite(t)){out.textContent='enter a positive half-life and elapsed time';return;}
+  const n=t/T,frac=Math.pow(0.5,n),pct=frac*100;
+  const show=pct>=0.01?pct.toFixed(pct>=10?1:2)+'%'
+    :(pct>0?pct.toExponential(2)+'%':'≈0%');
+  out.innerHTML=`remaining = <b>${show}</b> <small>after ${n.toFixed(2)} half-lives (${t} ${u})</small><br>`+
+    `decayed = ${(100-pct).toFixed(pct>=10?1:4)}% &nbsp;·&nbsp; λ = ${(Math.LN2/T).toExponential(2)} ${u}⁻¹`;
+}
+['hlT','hlt'].forEach(id=>document.getElementById(id).addEventListener('input',calcDecay));
+document.getElementById('hlU').addEventListener('change',calcDecay);
 
 /* carrier concentration: ni(T) = C·T^1.5·exp(-Eg/2kT), C calibrated to ni(300K) */
 const NI_MAT={Si:{Eg:1.12,ni300:1.0e10},Ge:{Eg:0.66,ni300:2.0e13},GaAs:{Eg:1.424,ni300:2.1e6},
@@ -1506,7 +1620,7 @@ document.querySelector('nav').addEventListener('click',ev=>{
 
 /* ---------- init ---------- */
 buildTable();
-calcBragg();calcRay();calcNi();calcVegard();calcDope();cvShow(0.80);
+calcBragg();calcRay();calcDecay();calcNi();calcVegard();calcDope();cvShow(0.80);
 physXtal=initXtal3d(document.getElementById('xtalSvg'),'FCC');
 document.getElementById('xtalCaption').textContent=STRUCTS.FCC.cap;
 drawBandK('Si');quizNext();
