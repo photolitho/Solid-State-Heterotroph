@@ -8,7 +8,7 @@ semiconductor / insulator classification, effective mass and device applications
 
 ## Features
 
-- **Full 118-element periodic table** — mobile-first, colour-coded by category, 44 px+ tap
+- **Full 118-element periodic table** — mobile-first, **colour-filled tiles** by category, 44 px+ tap
   targets, horizontal scroll on small screens.
 - **Element detail sheet** (slides up from the bottom) with **Data** and **Solid State Physics**
   tabs, plus an animated electron-shell pulse on open (pure CSS).
@@ -23,6 +23,9 @@ semiconductor / insulator classification, effective mass and device applications
   semiconductors / dielectrics / metals), Photonics or Magnetics relevance.
 - **Magnetism** — per-element classification (dia/para/ferro/antiferromagnetic),
   susceptibility, ordered moment, Curie & Néel temperatures.
+- **Radioactivity** — a ☢ marker on every radioactive element (Tc, Pm and all Z ≥ 84) with
+  most-stable isotope, half-life, decay mode and a short note; plus a Physics-tab decay
+  calculator with decay-mode and dose-unit (Bq / Gy / Sv) reference cards.
 - **Electronic structure** — animated shell diagram with valence highlighting and orbital occupancy.
 - **Interactive 3D crystal cells** — drag-to-rotate FCC, BCC, HCP, diamond cubic, zincblende.
 - **Compounds tab** — per-element list of semiconductor compounds (13 materials).
