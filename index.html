@@ -259,6 +259,11 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
 #filterBtn{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:0 13px;border-radius:8px;min-height:40px;
   border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;white-space:nowrap}
 #filterBtn.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08)}
+#filterClear{font-family:var(--mono);font-size:13px;padding:0 12px;border-radius:8px;min-height:40px;
+  border:1px solid var(--amber);background:rgba(255,107,53,.1);color:var(--amber);cursor:pointer}
+#filterClear[hidden]{display:none}
+.flabel{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--dim);margin:0 0 6px}
+.flabel.gap{margin-top:11px}
 #filterPanel{display:none;margin:8px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--panel2);padding:11px 12px}
 #filterPanel.show{display:block}
 #filterPanel .frow{display:flex;flex-wrap:wrap;gap:6px}
@@ -322,6 +327,7 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
         <label id="colorByLbl" for="colorBy">COLOR</label>
         <select id="colorBy" aria-label="colour the table by"></select>
         <button id="filterBtn">⚲ FILTER</button>
+        <button id="filterClear" hidden aria-label="clear filter">✕</button>
       </div>
       <div id="filterPanel"></div>
     </div>
@@ -1775,16 +1781,24 @@ function applyFilter(){
   });
   const fc=document.getElementById('filterCount');
   if(fc)fc.textContent=active?`${n} ${LANG==='it'?'elementi corrispondono':'elements match'}`:'';
+  const cl=document.getElementById('filterClear');if(cl)cl.hidden=!active;
+}
+function clearFilter(){
+  filterPreset=null;
+  const mn=document.getElementById('fMin'),mx=document.getElementById('fMax');
+  if(mn)mn.value='';if(mx)mx.value='';
+  document.querySelectorAll('#filterPanel .fchip[data-p]').forEach(x=>x.classList.remove('on'));
+  applyFilter();
 }
 function renderFilterPanel(){
-  const p=document.getElementById('filterPanel');
-  p.innerHTML=`<div class="frow">`+
-    Object.entries(FPRESETS).map(([k,v])=>`<span class="fchip${filterPreset===k?' on':''}" data-p="${k}">${LANG==='it'?v.it:v.en}</span>`).join('')+
-    `</div><div class="frange"><select id="fProp">`+
-    Object.entries(FNUM).map(([k,v])=>`<option value="${k}"${filterProp===k?' selected':''}>${LANG==='it'?v.it:v.en} (${v.unit})</option>`).join('')+
+  const p=document.getElementById('filterPanel'),it=LANG==='it';
+  p.innerHTML=`<div class="flabel">${it?'SCORCIATOIE':'QUICK PRESETS'}</div><div class="frow">`+
+    Object.entries(FPRESETS).map(([k,v])=>`<span class="fchip${filterPreset===k?' on':''}" data-p="${k}">${it?v.it:v.en}</span>`).join('')+
+    `</div><div class="flabel gap">${it?'INTERVALLO NUMERICO — scegli la proprietà, poi min/max':'NUMERIC RANGE — pick the property, then min/max'}</div>`+
+    `<div class="frange"><select id="fProp" aria-label="filter property">`+
+    Object.entries(FNUM).map(([k,v])=>`<option value="${k}"${filterProp===k?' selected':''}>${it?v.it:v.en} (${v.unit})</option>`).join('')+
     `</select><input id="fMin" type="number" inputmode="decimal" placeholder="min"><span style="color:var(--dim)">–</span>`+
-    `<input id="fMax" type="number" inputmode="decimal" placeholder="max">`+
-    `<button class="fchip" id="fClear">${LANG==='it'?'azzera':'clear'}</button></div><div id="filterCount"></div>`;
+    `<input id="fMax" type="number" inputmode="decimal" placeholder="max"></div><div id="filterCount"></div>`;
   p.querySelectorAll('.fchip[data-p]').forEach(ch=>ch.addEventListener('click',()=>{
     filterPreset=filterPreset===ch.dataset.p?null:ch.dataset.p;
     p.querySelectorAll('.fchip[data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===filterPreset));
@@ -1792,10 +1806,6 @@ function renderFilterPanel(){
   }));
   document.getElementById('fProp').addEventListener('change',ev=>{filterProp=ev.target.value;applyFilter()});
   ['fMin','fMax'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilter));
-  document.getElementById('fClear').addEventListener('click',()=>{
-    filterPreset=null;document.getElementById('fMin').value='';document.getElementById('fMax').value='';
-    p.querySelectorAll('.fchip[data-p]').forEach(x=>x.classList.remove('on'));applyFilter();
-  });
   applyFilter();
 }
 document.getElementById('filterBtn').addEventListener('click',()=>{
@@ -1804,6 +1814,7 @@ document.getElementById('filterBtn').addEventListener('click',()=>{
   p.classList.toggle('show',show);btn.classList.toggle('on',show);
   if(show&&!p.innerHTML.trim())renderFilterPanel();
 });
+document.getElementById('filterClear').addEventListener('click',clearFilter);
 
 /* ---------- language toggle ---------- */
 function applyLang(){
