@@ -29,7 +29,9 @@ const assert = (cond, msg) => {
 
 const hook = `check({ELEMENTS,COMPOUNDS,electronConfig,gridPos,openSheet,
   renderTab,setTab:t=>{curTab=t},STRUCTS,renderXtal3d,renderCompare,renderMap,
-  matData,modeColor,genQuiz,niCalc,NI_MAT,searchMatches});`;
+  matData,modeColor,genQuiz,niCalc,NI_MAT,searchMatches,egT,IT_NAMES,
+  setHeat:p=>{heatProp=p;computeHeatRange()},heatColor,drawDevice,
+  setLang:l=>{LANG=l},elName});`;
 const body = src.replace(/\/\* ---------- init[\s\S]*$/, hook);
 
 new Function('document', 'window', 'navigator', 'requestAnimationFrame', 'check', body)(
@@ -37,7 +39,8 @@ new Function('document', 'window', 'navigator', 'requestAnimationFrame', 'check'
   api => {
     const { ELEMENTS, COMPOUNDS, electronConfig, gridPos, openSheet, renderTab,
       setTab, STRUCTS, renderXtal3d, renderCompare, renderMap, matData,
-      modeColor, genQuiz, niCalc, NI_MAT, searchMatches } = api;
+      modeColor, genQuiz, niCalc, NI_MAT, searchMatches, egT, IT_NAMES,
+      setHeat, heatColor, drawDevice, setLang, elName } = api;
 
     assert(ELEMENTS.length === 118, 'expected 118 elements');
 
@@ -99,6 +102,35 @@ new Function('document', 'window', 'navigator', 'requestAnimationFrame', 'check'
     // search
     assert(searchMatches('si').some(e => e.symbol === 'Si'), 'search "si" should find Si');
     assert(searchMatches('49')[0].symbol === 'In', 'search "49" should find In');
+    assert(searchMatches('silicio').some(e => e.symbol === 'Si'), 'search IT name should find Si');
+
+    // Varshni Eg(T): Eg(300) must match the room-temperature table values
+    assert(Math.abs(egT(NI_MAT.Si, 300) - 1.12) < 0.01, 'Varshni Si Eg(300) off');
+    assert(Math.abs(egT(NI_MAT.Ge, 300) - 0.66) < 0.01, 'Varshni Ge Eg(300) off');
+    assert(egT(NI_MAT.Si, 400) < egT(NI_MAT.Si, 300), 'Eg should shrink with temperature');
+
+    // Italian names + elName
+    assert(IT_NAMES[14] === 'Silicio' && IT_NAMES[49] === 'Indio', 'IT names wrong');
+    setLang('it');
+    assert(elName(ELEMENTS[13]) === 'Silicio', 'elName(it) should be Silicio');
+    setLang('en');
+    assert(elName(ELEMENTS[13]) === 'Silicon', 'elName(en) should be Silicon');
+
+    // heatmap: colour for elements with data, null for those without
+    setHeat('atomicRadius');
+    assert(/^rgb/.test(heatColor(ELEMENTS[13]) || ''), 'heatColor should colour Si');
+    assert(heatColor(ELEMENTS[86]) === null, 'heatColor null where no radius (Fr)');
+    setHeat('abundance');
+    assert(/^rgb/.test(heatColor(ELEMENTS[7]) || ''), 'heatColor should colour O (abundance)');
+    setHeat('none');
+    assert(heatColor(ELEMENTS[13]) === null, 'heatColor off → null');
+
+    // device cross-sections render without error
+    for (const d of ['mos', 'laser', 'hemt']) drawDevice(d);
+
+    // atomic radius / abundance data wired onto elements
+    assert(ELEMENTS[13].atomicRadius === 111, 'Si atomic radius should be 111 pm');
+    assert(ELEMENTS[7].abundance === 461000, 'O crustal abundance should be 461000 ppm');
   });
 
 if (failures) { console.error(failures + ' assertion(s) failed'); process.exit(1); }
