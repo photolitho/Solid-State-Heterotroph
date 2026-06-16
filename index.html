@@ -171,8 +171,9 @@ html[data-theme=light] body{background:var(--bg)}
 html[data-theme=light] header{background:rgba(237,241,248,.93)}
 html[data-theme=light] nav{background:rgba(255,255,255,.96)}
 html[data-theme=light] #backdrop{background:rgba(30,40,70,.35)}
-#themeToggle{font-family:var(--mono);font-size:14px;padding:7px 10px;border-radius:7px;
+#themeToggle,#langToggle{font-family:var(--mono);font-size:14px;padding:7px 10px;border-radius:7px;
   border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;min-height:32px}
+#langToggle{font-size:11px;letter-spacing:.06em;font-weight:700}
 
 /* ---------- engineer view modes ---------- */
 #modes{display:flex;gap:5px;padding:8px 12px 2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -201,7 +202,14 @@ html[data-theme=light] #backdrop{background:rgba(30,40,70,.35)}
   background:color-mix(in srgb,var(--rad) 12%,transparent);margin:4px 0 6px}
 .ranote{margin-top:6px;padding:11px 13px;border-left:3px solid var(--rad);border-radius:0 9px 9px 0;
   background:var(--panel2);font-size:12.5px;line-height:1.55}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.chain .iso{font-family:var(--mono);font-size:11px;padding:4px 8px;border-radius:6px;
+  border:1px solid color-mix(in srgb,var(--rad) 45%,var(--line));background:color-mix(in srgb,var(--rad) 12%,var(--panel));color:var(--txt)}
+.chain .arr{font-family:var(--mono);font-size:8.5px;color:var(--rad);letter-spacing:.02em}
+.chain .arr::after{content:" →"}
 .hint{font-size:9.5px;color:var(--dim);font-family:var(--mono);text-align:center;margin-top:4px}
+.unitbtn{font-family:var(--mono);font-size:11px;padding:4px 11px;border-radius:14px;cursor:pointer;
+  border:1px solid var(--line);background:var(--panel2);color:var(--dim)}
 .why{margin-top:6px;padding:12px 14px;border-left:3px solid var(--cyan);border-radius:0 9px 9px 0;
   background:var(--panel2);font-size:13px;line-height:1.6;font-style:italic}
 .xtal3d{display:block;margin:4px auto;touch-action:none;cursor:grab;max-width:280px}
@@ -216,6 +224,10 @@ html[data-theme=light] #backdrop{background:rgba(30,40,70,.35)}
   border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);cursor:pointer}
 .cmp-sel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .cmp-sel .chip{cursor:pointer;border-color:var(--cyan);color:var(--cyan)}
+.cmp-exp{display:flex;gap:8px;margin-bottom:10px}
+.cmp-exp button{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:7px 14px;border-radius:7px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--dim);cursor:pointer;min-height:36px}
+.cmp-exp button:active{border-color:var(--cyan);color:var(--cyan)}
 #cmpTableWrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:100%}
 .cmp th,.cmp td{border:1px solid var(--line);padding:7px 9px;text-align:left;white-space:nowrap}
@@ -238,6 +250,26 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
   border:1px solid var(--line);background:var(--panel);color:var(--txt);cursor:pointer;white-space:nowrap}
 .qchip.fav{border-color:var(--amber);color:var(--amber)}
 .cell.searchdim{opacity:.08}
+#tools2{display:flex;gap:8px;padding:8px 12px 0;align-items:center}
+#heatSel{flex:1;background:var(--panel);color:var(--txt);border:1px solid var(--line);
+  border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:12px;min-height:40px}
+#filterBtn{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:0 13px;border-radius:8px;min-height:40px;
+  border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;white-space:nowrap}
+#filterBtn.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08)}
+#filterPanel{display:none;margin:8px 12px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:11px 12px}
+#filterPanel.show{display:block}
+#filterPanel .frow{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{font-family:var(--mono);font-size:10.5px;padding:6px 10px;border-radius:14px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;white-space:nowrap}
+.fchip.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.1)}
+#filterPanel .frange{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}
+#filterPanel select,#filterPanel input{background:var(--bg);color:var(--txt);border:1px solid var(--line);
+  border-radius:7px;padding:7px 9px;font-family:var(--mono);font-size:12px;min-height:36px}
+#filterPanel input{width:78px}
+#filterCount{font-family:var(--mono);font-size:10.5px;color:var(--cyan);margin-top:9px}
+#heatScale{display:none;align-items:center;gap:8px;padding:6px 14px 0;font-family:var(--mono);font-size:9.5px;color:var(--dim)}
+#heatScale.show{display:flex}
+#heatBar{flex:1;height:9px;border-radius:5px;min-width:80px}
 #ptable.size-s{grid-template-columns:repeat(18,minmax(34px,1fr));min-width:680px}
 #ptable.size-s .cell{min-width:34px;min-height:38px}
 #ptable.size-s .cell .nm{display:none}
@@ -270,7 +302,8 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
 <body>
 
 <header>
-  <h1>SOLID·STATE <small>// periodic explorer</small></h1>
+  <h1>SOLID·STATE <small id="hSub">// periodic explorer</small></h1>
+  <button id="langToggle" aria-label="language">EN</button>
   <button id="themeToggle" aria-label="toggle day / night theme">☀</button>
   <button id="semiToggle" aria-pressed="false">⏚ SEMI FOCUS</button>
 </header>
@@ -287,7 +320,13 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
       <input id="searchBox" type="search" placeholder="search… (si · gallium · 49)" autocomplete="off">
       <button id="sizeBtn" aria-label="table density">M</button>
     </div>
+    <div id="tools2">
+      <select id="heatSel" aria-label="property heatmap"></select>
+      <button id="filterBtn">⚲ FILTER</button>
+    </div>
+    <div id="filterPanel"></div>
     <div id="quickRow" style="display:none"></div>
+    <div id="heatScale"><span id="heatMin"></span><span id="heatBar"></span><span id="heatMax"></span></div>
     <div id="semiPanel"></div>
     <div id="tableWrap"><div id="ptable" role="grid" aria-label="Periodic table"></div></div>
     <div id="legend"></div>
@@ -455,10 +494,69 @@ const R=[
 [117,'Ts','Tennessine',294,'ha',7,17,null,null,null,null,'U',null,null,'U',null,null,2010,'Synthetic — research only'],
 [118,'Og','Oganesson',294,'ng',7,18,null,null,null,null,'U',null,null,'U',null,null,2002,'Synthetic — research only']
 ];
+/* calculated atomic radius (Clementi, pm) for Z=1–86; null beyond */
+const RADIUS=[53,31,167,112,87,67,56,48,42,38,190,145,118,111,98,88,79,71,243,194,
+ 184,176,171,166,161,156,152,149,145,142,136,125,114,103,94,88,265,219,212,206,
+ 198,190,183,178,173,169,165,161,156,145,133,123,115,108,298,253,226,210,247,206,
+ 205,238,231,233,225,228,226,226,222,222,217,208,200,193,188,185,180,177,174,171,
+ 156,154,143,135,127,120,null,null,null,null,null,null,null,null,null,null,null,null,
+ null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+/* crustal abundance (mg/kg = ppm); null = synthetic / negligible */
+const ABUND=[1400,0.008,20,2.8,10,200,19,461000,585,0.005,23600,23300,82300,282000,1050,350,145,3.5,20900,41500,
+ 22,5650,120,102,950,56300,25,84,60,70,19,1.5,1.8,0.05,2.4,0.0001,90,370,33,165,
+ 20,1.2,null,0.001,0.001,0.015,0.075,0.15,0.25,2.3,0.2,0.001,0.45,0.00003,3,425,39,66.5,9.2,41.5,
+ null,7.05,2,6.2,1.2,5.2,1.3,3.5,0.52,3.2,0.8,3,2,1.25,0.0007,0.0015,0.001,0.005,0.004,0.085,0.85,
+ 14,0.009,null,null,null,null,0.0000009,null,9.6,0.0000014,2.7,null,null,null,null,null,null,null,null,null,
+ null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+
+/* element names — Italian */
+const IT_NAMES={1:'Idrogeno',2:'Elio',3:'Litio',4:'Berillio',5:'Boro',6:'Carbonio',7:'Azoto',8:'Ossigeno',
+ 9:'Fluoro',10:'Neon',11:'Sodio',12:'Magnesio',13:'Alluminio',14:'Silicio',15:'Fosforo',16:'Zolfo',
+ 17:'Cloro',18:'Argon',19:'Potassio',20:'Calcio',21:'Scandio',22:'Titanio',23:'Vanadio',24:'Cromo',
+ 25:'Manganese',26:'Ferro',27:'Cobalto',28:'Nichel',29:'Rame',30:'Zinco',31:'Gallio',32:'Germanio',
+ 33:'Arsenico',34:'Selenio',35:'Bromo',36:'Cripton',37:'Rubidio',38:'Stronzio',39:'Ittrio',40:'Zirconio',
+ 41:'Niobio',42:'Molibdeno',43:'Tecnezio',44:'Rutenio',45:'Rodio',46:'Palladio',47:'Argento',48:'Cadmio',
+ 49:'Indio',50:'Stagno',51:'Antimonio',52:'Tellurio',53:'Iodio',54:'Xeno',55:'Cesio',56:'Bario',
+ 57:'Lantanio',58:'Cerio',59:'Praseodimio',60:'Neodimio',61:'Promezio',62:'Samario',63:'Europio',
+ 64:'Gadolinio',65:'Terbio',66:'Disprosio',67:'Olmio',68:'Erbio',69:'Tulio',70:'Itterbio',71:'Lutezio',
+ 72:'Afnio',73:'Tantalio',74:'Tungsteno',75:'Renio',76:'Osmio',77:'Iridio',78:'Platino',79:'Oro',
+ 80:'Mercurio',81:'Tallio',82:'Piombo',83:'Bismuto',84:'Polonio',85:'Astato',86:'Radon',87:'Francio',
+ 88:'Radio',89:'Attinio',90:'Torio',91:'Protoattinio',92:'Uranio',93:'Nettunio',94:'Plutonio',
+ 95:'Americio',96:'Curio',97:'Berkelio',98:'Californio',99:'Einsteinio',100:'Fermio',101:'Mendelevio',
+ 102:'Nobelio',103:'Laurenzio',104:'Rutherfordio',105:'Dubnio',106:'Seaborgio',107:'Bohrio',108:'Hassio',
+ 109:'Meitnerio',110:'Darmstadtio',111:'Roentgenio',112:'Copernicio',113:'Nihonio',114:'Flerovio',
+ 115:'Moscovio',116:'Livermorio',117:'Tennesso',118:'Oganesson'};
+
 const ELEMENTS=R.map(r=>({z:r[0],symbol:r[1],name:r[2],mass:r[3],category:r[4],period:r[5],group:r[6],
   electronegativity:r[7],meltingPoint:r[8],boilingPoint:r[9],density:r[10],crystalStructure:r[11],
   latticeConstant:r[12],bandGap:r[13],bandType:r[14],gapKind:r[15],niLog:r[16],discoveredYear:r[17],
-  deviceApplications:r[18]}));
+  deviceApplications:r[18],atomicRadius:RADIUS[r[0]-1],abundance:ABUND[r[0]-1]}));
+
+/* ---------- i18n (EN / IT) — element names + browse/detail chrome ---------- */
+let LANG=(function(){try{return localStorage.getItem('sshet-lang')||'en'}catch(_){return'en'}})();
+const STR={
+ en:{sub:'// periodic explorer',search:'search… (si · gallium · 49)',
+   nav_table:'TABLE',nav_phys:'PHYSICS',nav_cmp:'COMPARE',nav_map:'MAP',
+   tab_data:'DATA',tab_phys:'PHYSICS',tab_comp:'COMPOUNDS',
+   m_chem:'⚗ CHEMISTRY',m_semi:'⏚ SEMICONDUCTOR',m_phot:'✦ PHOTONICS',m_mag:'⊿ MAGNETICS',
+   k_z:'Atomic number',k_mass:'Atomic mass',k_eneg:'Electronegativity (Pauling)',
+   k_melt:'Melting point',k_boil:'Boiling point',k_dens:'Density',k_radius:'Atomic radius',
+   k_abund:'Crustal abundance',k_disc:'Discovered',k_stab:'Stability',k_ancient:'Ancient',
+   v_stable:'Stable nuclide(s)',v_radio:'☢ Radioactive',
+   sec_estruct:'ELECTRONIC STRUCTURE',sec_trend:'PERIODIC TREND',sec_radio:'☢ RADIOACTIVITY',
+   shells:'shells'},
+ it:{sub:'// esploratore periodico',search:'cerca… (si · silicio · 49)',
+   nav_table:'TAVOLA',nav_phys:'FISICA',nav_cmp:'CONFRONTA',nav_map:'MAPPA',
+   tab_data:'DATI',tab_phys:'FISICA',tab_comp:'COMPOSTI',
+   m_chem:'⚗ CHIMICA',m_semi:'⏚ SEMICONDUTTORI',m_phot:'✦ FOTONICA',m_mag:'⊿ MAGNETISMO',
+   k_z:'Numero atomico',k_mass:'Massa atomica',k_eneg:'Elettronegatività (Pauling)',
+   k_melt:'Punto di fusione',k_boil:'Punto di ebollizione',k_dens:'Densità',k_radius:'Raggio atomico',
+   k_abund:'Abbondanza crostale',k_disc:'Scoperto',k_stab:'Stabilità',k_ancient:'Antichità',
+   v_stable:'Nuclide stabile',v_radio:'☢ Radioattivo',
+   sec_estruct:'STRUTTURA ELETTRONICA',sec_trend:'ANDAMENTO PERIODICO',sec_radio:'☢ RADIOATTIVITÀ',
+   shells:'gusci'}};
+function t(k){return(STR[LANG]&&STR[LANG][k])||STR.en[k]||k}
+function elName(e){return LANG==='it'?(IT_NAMES[e.z]||e.name):e.name}
 
 /* effective masses (conduction / heavy-hole, units of m0) for key semiconductors */
 const EFF_MASS={5:'mₑ*≈0.5 m₀',6:'mₑ*≈0.36 / mₕ*≈0.86 m₀ (diamond)',14:'mₑ*≈0.26 / mₕ*≈0.49 m₀',
@@ -688,8 +786,8 @@ function buildTable(){
     b.className='cell';b.dataset.z=e.z;
     b.style.setProperty('--cat',`var(${CATS[e.category][1]})`);
     b.style.gridRow=row;b.style.gridColumn=col;
-    b.setAttribute('aria-label',e.name);
-    b.innerHTML=`<span class="z">${e.z}</span>${RADIO[e.z]?'<span class="ra" aria-label="radioactive">☢</span>':''}<span class="sym">${e.symbol}</span><span class="nm">${e.name}</span>`;
+    b.setAttribute('aria-label',elName(e));
+    b.innerHTML=`<span class="z">${e.z}</span>${RADIO[e.z]?'<span class="ra" aria-label="radioactive">☢</span>':''}<span class="sym">${e.symbol}</span><span class="nm">${elName(e)}</span>`;
     b.addEventListener('click',()=>openSheet(e));
     frag.appendChild(b);
   }
@@ -723,11 +821,11 @@ function openSheet(e){
   box.innerHTML=`<span class="bigsym" style="color:${col}">${e.symbol}</span>`+
     ec.shells.map((n,i)=>{const s=30+i*((96-30)/Math.max(ec.shells.length-1,1));
       return`<span class="ring" style="width:${s}px;height:${s}px;border-color:${col};animation-delay:${i*90}ms"></span>`}).join('');
-  document.getElementById('shName').textContent=`${e.z} · ${e.name}`;
+  document.getElementById('shName').textContent=`${e.z} · ${elName(e)}`;
   const chip=document.getElementById('shCat');
   chip.textContent=CATS[e.category][0].toUpperCase();
   chip.style.color=col;chip.style.borderColor=col;
-  document.getElementById('shShells').textContent='shells '+ec.shells.join(' · ');
+  document.getElementById('shShells').textContent=t('shells')+' '+ec.shells.join(' · ');
   renderTab();
   sheet.classList.add('open');backdrop.classList.add('show');
   recents=[e.z,...recents.filter(z=>z!==e.z)].slice(0,8);save('sshet-recents',recents);
@@ -739,6 +837,13 @@ function closeSheet(){sheet.classList.remove('open');backdrop.classList.remove('
   document.querySelectorAll('.cell.selected').forEach(c=>c.classList.remove('selected'));
   try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}}
 backdrop.addEventListener('click',closeSheet);
+sheetBody.addEventListener('click',ev=>{
+  if(ev.target.closest('[data-unit]')){
+    TUNIT=TUNIT==='K'?'C':TUNIT==='C'?'F':'K';
+    try{localStorage.setItem('sshet-tunit',TUNIT)}catch(_){}
+    renderTab();
+  }
+});
 tabData.addEventListener('click',()=>{curTab='data';renderTab()});
 tabPhys.addEventListener('click',()=>{curTab='phys';renderTab()});
 tabComp.addEventListener('click',()=>{curTab='comp';renderTab()});
@@ -763,23 +868,73 @@ function eStructure(e,col){
   const ec=electronConfig(e.z),sh=ec.shells;
   const val=sh[sh.length-1];
   const dist=sh.map((n,i)=>`<span title="shell n=${i+1}" style="${i===sh.length-1?`color:${col};font-weight:700`:''}">${SHELL_NAMES[i]||i+1}: ${n}</span>`).join(' · ');
-  return `<div class="sect">ELECTRONIC STRUCTURE</div>`+
+  return `<div class="sect">${t('sec_estruct')}</div>`+
     shellSVG(e.z,col)+
     drow('Shell distribution',`<span style="font-family:var(--mono)">${dist}</span>`)+
     drow('Valence electrons',`<b style="color:${col}">${val}</b> (outermost shell)`,true)+
     drow('Orbital occupancy',ec.cfg)+
     `<div class="hint">shells K–Q ↔ principal quantum number n = 1–7 · the highlighted valence shell governs bonding & doping</div>`;
 }
+/* temperature unit toggle (K / °C / °F) */
+let TUNIT=(function(){try{return localStorage.getItem('sshet-tunit')||'K'}catch(_){return'K'}})();
+function tempRow(K){
+  if(K==null)return'—';
+  const C=K-273.15,F=C*9/5+32;
+  if(TUNIT==='C')return`${C.toFixed(0)} °C · <span style="color:var(--dim)">${K} K</span>`;
+  if(TUNIT==='F')return`${F.toFixed(0)} °F · <span style="color:var(--dim)">${K} K</span>`;
+  return`${K} K · <span style="color:var(--dim)">${C.toFixed(0)} °C</span>`;
+}
+function abundRow(a){
+  if(a==null)return`<span style="color:var(--dim)">${LANG==='it'?'sintetico / tracce':'synthetic / trace'}</span>`;
+  if(a>=10000)return`${(a/10000).toFixed(a>=100000?1:2)} % <span style="color:var(--dim)">${LANG==='it'?'in massa':'by mass'}</span>`;
+  if(a>=0.01)return`${a} ppm`;
+  return`${a.toExponential(1)} ppm`;
+}
+function miniTrend(e,prop,label,unit,col){
+  const peers=ELEMENTS.filter(x=>x.period===e.period&&x.group!=null&&x[prop]!=null);
+  if(e[prop]==null||peers.length<3)return'';
+  const W=284,H=104,L=34,R=12,T=10,B=20;
+  const gs=peers.map(x=>x.group),vs=peers.map(x=>x[prop]);
+  const gmn=Math.min(...gs),gmx=Math.max(...gs),vmn=Math.min(...vs),vmx=Math.max(...vs);
+  const X=g=>L+(g-gmn)/Math.max(gmx-gmn,1)*(W-L-R),Y=v=>T+(vmx-v)/Math.max(vmx-vmn,1e-9)*(H-T-B);
+  const pts=peers.map(x=>`${X(x.group).toFixed(1)},${Y(x[prop]).toFixed(1)}`).join(' L');
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;margin:2px auto;max-width:${W}px" aria-label="${label} trend">`;
+  s+=`<line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="var(--line)" stroke-width="0.6"/>`;
+  s+=`<text x="${L-4}" y="${Y(vmx)+3}" font-size="8" text-anchor="end" fill="var(--dim)" font-family="monospace">${(+vmx).toFixed(unit==='pm'?0:1)}</text>`;
+  s+=`<text x="${L-4}" y="${Y(vmn)+3}" font-size="8" text-anchor="end" fill="var(--dim)" font-family="monospace">${(+vmn).toFixed(unit==='pm'?0:1)}</text>`;
+  s+=`<path d="M${pts}" fill="none" stroke="var(--dim)" stroke-width="1.3" stroke-opacity="0.7"/>`;
+  for(const x of peers){const cur=x.z===e.z;
+    s+=`<circle cx="${X(x.group).toFixed(1)}" cy="${Y(x[prop]).toFixed(1)}" r="${cur?4.5:2.4}" fill="${cur?col:'var(--dim)'}"/>`;
+    if(cur)s+=`<text x="${X(x.group).toFixed(1)}" y="${Y(x[prop])-7}" font-size="8.5" text-anchor="middle" fill="${col}" font-family="monospace">${x.symbol}</text>`;}
+  s+=`<text x="${(L+W-R)/2}" y="${H-5}" font-size="8" text-anchor="middle" fill="var(--dim)" font-family="monospace">${LANG==='it'?'gruppo →':'group →'}</text>`;
+  return s+'</svg>'+`<div class="hint">${label} ${LANG==='it'?'lungo il periodo':'across period'} ${e.period} · ${unit}</div>`;
+}
+function trendSection(e,col){
+  let body=miniTrend(e,'atomicRadius',LANG==='it'?'Raggio atomico':'Atomic radius','pm',col);
+  if(!body)body=miniTrend(e,'electronegativity',LANG==='it'?'Elettronegatività':'Electronegativity','χ',col);
+  return body?`<div class="sect">${t('sec_trend')}</div>`+body:'';
+}
 function radioSection(e){
   const r=RADIO[e.z];
   if(!r)return'';
-  const[iso,hl,decay,note]=r;
-  return `<div class="sect">☢ RADIOACTIVITY</div>`+
-    `<span class="rabadge">☢ RADIOACTIVE · no stable isotope</span>`+
-    drow('Most stable isotope',iso)+
-    drow('Half-life',hl,true)+
-    drow('Primary decay',decay)+
-    (note?`<div class="ranote">${note}</div>`:'');
+  const[iso,hl,decay,note]=r,it=LANG==='it';
+  return `<div class="sect">${t('sec_radio')}</div>`+
+    `<span class="rabadge">${it?'☢ RADIOATTIVO · nessun isotopo stabile':'☢ RADIOACTIVE · no stable isotope'}</span>`+
+    drow(it?'Isotopo più stabile':'Most stable isotope',iso)+
+    drow(it?'Emivita':'Half-life',hl,true)+
+    drow(it?'Decadimento primario':'Primary decay',decay)+
+    (note?`<div class="ranote">${note}</div>`:'')+
+    chainHTML(e.z);
+}
+const DECAY_CHAINS={
+ 90:{name:'Thorium series · 4n',steps:['²³²Th','α','²²⁸Ra','β⁻','²²⁸Ac','β⁻','²²⁸Th','α','²²⁴Ra','α','²²⁰Rn','α','²¹⁶Po','α','²¹²Pb','β⁻','²¹²Bi','α/β⁻','²⁰⁸Pb ✓']},
+ 92:{name:'Uranium series · 4n+2',steps:['²³⁸U','α','²³⁴Th','β⁻','²³⁴Pa','β⁻','²³⁴U','α','²³⁰Th','α','²²⁶Ra','α','²²²Rn','α','²¹⁸Po','α/β⁻','²¹⁴Pb','…','²⁰⁶Pb ✓']}};
+function chainHTML(z){
+  const c=DECAY_CHAINS[z];if(!c)return'';
+  let h=`<div class="sect" style="color:var(--rad)">${LANG==='it'?'CATENA DI DECADIMENTO':'DECAY CHAIN'}</div>`+
+    `<div class="hint" style="text-align:left;margin-bottom:6px">${c.name} → ${LANG==='it'?'piombo stabile':'stable lead'}</div><div class="chain">`;
+  c.steps.forEach((s,i)=>h+=i%2?`<span class="arr">${s}</span>`:`<span class="iso">${s}</span>`);
+  return h+'</div>';
 }
 function magSection(e){
   const m=MAG[e.z];
@@ -800,15 +955,19 @@ function renderTab(){
   const col=`var(${CATS[e.category][1]})`;
   if(curTab==='data'){
     sheetBody.innerHTML=
-      drow('Atomic number',e.z)+
-      drow('Atomic mass',fmt(e.mass,' u'))+
-      drow('Electronegativity (Pauling)',fmt(e.electronegativity))+
-      drow('Melting point',e.meltingPoint==null?'—':`${e.meltingPoint} K · ${(e.meltingPoint-273.15).toFixed(0)} °C`)+
-      drow('Boiling point',e.boilingPoint==null?'—':`${e.boilingPoint} K · ${(e.boilingPoint-273.15).toFixed(0)} °C`)+
-      drow('Density',fmt(e.density,' g/cm³'))+
-      drow('Discovered',e.discoveredYear===0?'Ancient':fmt(e.discoveredYear))+
-      drow('Stability',RADIO[e.z]?`<span style="color:var(--rad)">☢ Radioactive</span>`:`<span style="color:var(--c-nm)">Stable nuclide(s)</span>`)+
+      `<div style="text-align:right;margin:-2px 0 0"><button class="unitbtn" data-unit>${TUNIT==='K'?'K':'°'+TUNIT}</button></div>`+
+      drow(t('k_z'),e.z)+
+      drow(t('k_mass'),fmt(e.mass,' u'))+
+      drow(t('k_eneg'),fmt(e.electronegativity))+
+      drow(t('k_melt'),tempRow(e.meltingPoint))+
+      drow(t('k_boil'),tempRow(e.boilingPoint))+
+      drow(t('k_dens'),fmt(e.density,' g/cm³'))+
+      drow(t('k_radius'),e.atomicRadius==null?'—':`${e.atomicRadius} pm`)+
+      drow(t('k_abund'),abundRow(e.abundance))+
+      drow(t('k_disc'),e.discoveredYear===0?t('k_ancient'):fmt(e.discoveredYear))+
+      drow(t('k_stab'),RADIO[e.z]?`<span style="color:var(--rad)">${t('v_radio')}</span>`:`<span style="color:var(--c-nm)">${t('v_stable')}</span>`)+
       radioSection(e)+
+      trendSection(e,col)+
       eStructure(e,col);
   }else if(curTab==='phys'){
     const x=XTALS[e.crystalStructure||'U'],bt=BANDTYPE[e.bandType||'U'];
@@ -982,7 +1141,7 @@ physView.innerHTML=`
 </div>
 <div class="pcard">
   <h2>INTRINSIC CARRIER CONCENTRATION</h2>
-  <div class="sub">Thermally generated electron–hole pairs in a pure semiconductor.</div>
+  <div class="sub">Thermally generated electron–hole pairs in a pure semiconductor. The gap itself shrinks with temperature (Varshni), and that is included here.</div>
   <div class="formula">nᵢ = √(N꜀Nᵥ) · exp(−E𝗀 / 2k᙭T)</div>
   <div class="inrow">
     <label>material<select id="ccMat">
@@ -1021,6 +1180,17 @@ physView.innerHTML=`
   <svg id="xtalSvg" class="xtal3d" viewBox="0 0 300 280" width="300" height="280" aria-label="crystal structure"></svg>
   <div class="hint">⟲ drag to rotate</div>
   <div id="xtalCaption"></div>
+</div>
+<div class="pcard">
+  <h2>DEVICE CROSS-SECTION</h2>
+  <div class="sub">Schematic layer stacks — how the elements and compounds in this app become real devices.</div>
+  <div class="xtalbtns" id="devBtns">
+    <button data-d="mos" class="act">n-MOSFET</button>
+    <button data-d="laser">InP LASER</button>
+    <button data-d="hemt">GaN HEMT</button>
+  </div>
+  <svg id="devSvg" viewBox="0 0 300 200" width="100%" style="max-width:340px;display:block;margin:4px auto" aria-label="device cross-section"></svg>
+  <div id="devCaption" class="hint"></div>
 </div>
 <div class="pcard">
   <h2>BAND DIAGRAMS · E vs k</h2>
@@ -1111,12 +1281,19 @@ function calcDecay(){
 document.getElementById('hlU').addEventListener('change',calcDecay);
 
 /* carrier concentration: ni(T) = C·T^1.5·exp(-Eg/2kT), C calibrated to ni(300K) */
-const NI_MAT={Si:{Eg:1.12,ni300:1.0e10},Ge:{Eg:0.66,ni300:2.0e13},GaAs:{Eg:1.424,ni300:2.1e6},
-  InP:{Eg:1.344,ni300:1.3e7},GaN:{Eg:3.39,ni300:1.9e-10}};
+/* Eg0/va/vb = Varshni parameters: Eg(T) = Eg0 − va·T²/(T+vb) */
+const NI_MAT={
+  Si:{Eg:1.12,ni300:1.0e10,Eg0:1.166,va:4.73e-4,vb:636},
+  Ge:{Eg:0.66,ni300:2.0e13,Eg0:0.7437,va:4.77e-4,vb:235},
+  GaAs:{Eg:1.424,ni300:2.1e6,Eg0:1.519,va:5.41e-4,vb:204},
+  InP:{Eg:1.344,ni300:1.3e7,Eg0:1.4206,va:4.906e-4,vb:327},
+  GaN:{Eg:3.39,ni300:1.9e-10,Eg0:3.507,va:9.09e-4,vb:830}};
 const KB=8.617333e-5;
+function egT(m,T){return m.Eg0!=null?m.Eg0-m.va*T*T/(T+m.vb):m.Eg}
 function niCalc(m,T){
-  const C=m.ni300/(Math.pow(300,1.5)*Math.exp(-m.Eg/(2*KB*300)));
-  return C*Math.pow(T,1.5)*Math.exp(-m.Eg/(2*KB*T));
+  const Eg3=egT(m,300),EgT=egT(m,T);
+  const C=m.ni300/(Math.pow(300,1.5)*Math.exp(-Eg3/(2*KB*300)));
+  return C*Math.pow(T,1.5)*Math.exp(-EgT/(2*KB*T));
 }
 function sciHTML(v){
   if(v<=0||!isFinite(v))return'—';
@@ -1155,7 +1332,7 @@ function calcNi(){
     T=+document.getElementById('ccT').value;
   document.getElementById('ccTv').textContent=T;
   document.getElementById('ccOut').innerHTML=
-    `nᵢ ≈ <b>${sciHTML(niCalc(m,T))}</b> cm⁻³ <small>at ${T} K · E𝗀 = ${m.Eg} eV (assumed T-independent)</small>`;
+    `nᵢ ≈ <b>${sciHTML(niCalc(m,T))}</b> cm⁻³ <small>at ${T} K · E𝗀(T) = ${egT(m,T).toFixed(3)} eV <span style="color:var(--dim)">(Varshni · E𝗀(300) = ${egT(m,300).toFixed(3)})</span></small>`;
   drawArr(name,T);
 }
 document.getElementById('ccMat').addEventListener('change',calcNi);
@@ -1261,6 +1438,61 @@ document.getElementById('bandBtns').addEventListener('click',ev=>{
   const b=ev.target.closest('button');if(!b)return;
   document.querySelectorAll('#bandBtns button').forEach(x=>x.classList.toggle('act',x===b));
   drawBandK(b.dataset.m);
+});
+
+/* ---------- device cross-sections ---------- */
+let curDev='mos';
+function devLayer(x,y,w,h,fill,label,sub){
+  let s=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="var(--line)" stroke-width="0.8" rx="2"/>`;
+  if(label)s+=`<text x="${x+w/2}" y="${y+h/2+3}" font-size="8.5" text-anchor="middle" fill="var(--txt)" font-family="monospace">${label}</text>`;
+  if(sub)s+=`<text x="${x+w/2}" y="${y+h/2+13}" font-size="7" text-anchor="middle" fill="var(--dim)" font-family="monospace">${sub}</text>`;
+  return s;
+}
+function drawDevice(which){
+  const svg=document.getElementById('devSvg');if(!svg)return;
+  const CY='rgba(0,229,255,.16)',AM='rgba(255,107,53,.4)',PU='rgba(168,85,247,.18)',MT='rgba(150,165,190,.55)';
+  let s='',cap='';
+  if(which==='mos'){
+    s+=devLayer(20,120,260,60,CY,'p-Si substrate');
+    s+=devLayer(30,120,60,32,AM,'n⁺','source');
+    s+=devLayer(210,120,60,32,AM,'n⁺','drain');
+    s+=devLayer(95,112,110,8,PU,'');
+    s+=`<text x="150" y="118" font-size="6.5" text-anchor="middle" fill="var(--dim)" font-family="monospace">gate oxide (SiO₂/HfO₂)</text>`;
+    s+=devLayer(95,90,110,22,'rgba(0,229,255,.35)','Gate','poly/metal');
+    s+=`<text x="60" y="84" font-size="8" text-anchor="middle" fill="var(--amber)" font-family="monospace">Source</text>`;
+    s+=`<text x="240" y="84" font-size="8" text-anchor="middle" fill="var(--amber)" font-family="monospace">Drain</text>`;
+    s+=`<line x1="95" y1="152" x2="205" y2="152" stroke="var(--cyan)" stroke-width="1" stroke-dasharray="3 3"/>`;
+    s+=`<text x="150" y="166" font-size="7" text-anchor="middle" fill="var(--cyan)" font-family="monospace">inversion channel</text>`;
+    cap=LANG==='it'?'Il transistor che costruisce ogni chip CMOS — Si, SiO₂/HfO₂, droganti As/B.'
+      :'The transistor behind every CMOS chip — Si, SiO₂/HfO₂ gate, As/B doping.';
+  }else if(which==='laser'){
+    s+=devLayer(40,150,220,16,MT,'metal contact (p)');
+    s+=devLayer(40,116,220,34,PU,'p-InP cladding');
+    s+=devLayer(40,104,220,12,AM,'InGaAsP active','λ = 1550 nm');
+    s+=devLayer(40,70,220,34,CY,'n-InP cladding');
+    s+=devLayer(40,54,220,16,MT,'n-InP substrate');
+    s+=`<path d="M260 110 L292 110" stroke="var(--amber)" stroke-width="2"/><path d="M286 106 L292 110 L286 114" fill="none" stroke="var(--amber)" stroke-width="2"/>`;
+    s+=`<text x="276" y="103" font-size="7" text-anchor="middle" fill="var(--amber)" font-family="monospace">light</text>`;
+    cap=LANG==='it'?'Laser a doppia eterostruttura su InP: il cuore della fotonica per le telecom a 1550 nm.'
+      :'InP double-heterostructure laser — the heart of 1550 nm telecom photonics.';
+  }else{
+    s+=devLayer(40,150,220,16,MT,'Si / SiC substrate');
+    s+=devLayer(40,110,220,40,CY,'GaN buffer');
+    s+=devLayer(40,98,220,12,'rgba(102,224,138,.45)','AlGaN barrier');
+    s+=`<line x1="44" y1="111" x2="256" y2="111" stroke="var(--cyan)" stroke-width="1.4" stroke-dasharray="2 2"/>`;
+    s+=`<text x="150" y="125" font-size="7" text-anchor="middle" fill="var(--cyan)" font-family="monospace">2-DEG channel</text>`;
+    s+=devLayer(50,82,40,16,MT,'S');s+=devLayer(210,82,40,16,MT,'D');s+=devLayer(130,78,40,20,'rgba(255,107,53,.5)','G');
+    cap=LANG==='it'?'HEMT GaN: il gas di elettroni 2-D (2-DEG) all\'interfaccia AlGaN/GaN per potenza e 5G.'
+      :'GaN HEMT — the 2-D electron gas (2-DEG) at the AlGaN/GaN interface for power & 5G.';
+  }
+  svg.innerHTML=s;
+  document.getElementById('devCaption').textContent=cap;
+}
+document.getElementById('devBtns').addEventListener('click',ev=>{
+  const b=ev.target.closest('button');if(!b)return;
+  curDev=b.dataset.d;
+  document.querySelectorAll('#devBtns button').forEach(x=>x.classList.toggle('act',x===b));
+  drawDevice(curDev);
 });
 
 /* quiz */
@@ -1409,6 +1641,7 @@ document.getElementById('xtalBtns').addEventListener('click',ev=>{
 /* ---------- engineer view modes ---------- */
 let curMode='chem';
 function modeColor(e){
+  if(typeof heatProp!=='undefined'&&heatProp!=='none')return heatColor(e);
   if(curMode==='chem')return`var(${CATS[e.category][1]})`;
   if(curMode==='semi'){
     const r=(ROLES[e.z]||[]).join(' ');
@@ -1433,16 +1666,165 @@ function refreshCells(){
     const e=ELEMENTS[+c.dataset.z-1];
     const col=modeColor(e);
     c.style.setProperty('--cat',col||'var(--line)');
-    c.classList.toggle('dim',(semiOn&&!isSemi(e))||(col===null&&curMode!=='chem'));
+    c.classList.toggle('dim',(semiOn&&!isSemi(e))||(col===null&&(curMode!=='chem'||heatProp!=='none')));
   });
-  document.getElementById('legend').innerHTML=
-    MODE_LEGEND[curMode]().map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
+  const hs=document.getElementById('heatScale');
+  if(heatProp!=='none'){
+    renderHeatScale();hs.classList.add('show');
+    document.getElementById('legend').innerHTML='';
+  }else{
+    hs.classList.remove('show');
+    document.getElementById('legend').innerHTML=
+      MODE_LEGEND[curMode]().map(([n,c])=>`<span style="--lc:${c}"><i style="background:${c}"></i>${n}</span>`).join('');
+  }
 }
 document.getElementById('modes').addEventListener('click',ev=>{
   const b=ev.target.closest('button');if(!b)return;
   curMode=b.dataset.mode;
   document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('act',x===b));
   refreshCells();
+});
+
+/* ---------- property heatmap ---------- */
+const HEAT_PROPS={
+  none:{en:'— Heatmap off —',it:'— Heatmap off —'},
+  atomicRadius:{en:'Atomic radius',it:'Raggio atomico',unit:'pm'},
+  electronegativity:{en:'Electronegativity',it:'Elettronegatività',unit:'χ'},
+  meltingPoint:{en:'Melting point',it:'Punto di fusione',unit:'K'},
+  density:{en:'Density',it:'Densità',unit:'g/cm³'},
+  abundance:{en:'Crustal abundance',it:'Abbondanza crostale',unit:'ppm',log:true}};
+let heatProp='none',heatRange=null;
+const HEAT_STOPS=['#3b1f6b','#3d4fb5','#1f9bd6','#3fc98a','#d4d44a','#ff6b35'];
+function hx(c){return[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)]}
+function rampColor(t){
+  t=Math.max(0,Math.min(1,t));
+  const f=t*(HEAT_STOPS.length-1),i=Math.min(Math.floor(f),HEAT_STOPS.length-2),fr=f-i;
+  const a=hx(HEAT_STOPS[i]),b=hx(HEAT_STOPS[i+1]);
+  return`rgb(${Math.round(a[0]+(b[0]-a[0])*fr)},${Math.round(a[1]+(b[1]-a[1])*fr)},${Math.round(a[2]+(b[2]-a[2])*fr)})`;
+}
+function computeHeatRange(){
+  if(heatProp==='none'){heatRange=null;return;}
+  const log=!!HEAT_PROPS[heatProp].log;
+  const vals=ELEMENTS.map(e=>e[heatProp]).filter(v=>v!=null&&(!log||v>0)).map(v=>log?Math.log10(v):v);
+  heatRange={min:Math.min(...vals),max:Math.max(...vals),log};
+}
+function heatColor(e){
+  if(!heatRange)return null;
+  let v=e[heatProp];if(v==null||(heatRange.log&&v<=0))return null;
+  const tv=heatRange.log?Math.log10(v):v;
+  return rampColor((tv-heatRange.min)/Math.max(heatRange.max-heatRange.min,1e-9));
+}
+function renderHeatScale(){
+  const p=HEAT_PROPS[heatProp],log=p.log;
+  document.getElementById('heatBar').style.background=
+    `linear-gradient(90deg,${[0,.2,.4,.6,.8,1].map(rampColor).join(',')})`;
+  const fmtV=x=>{const v=log?Math.pow(10,x):x;return v>=100?v.toFixed(0):v>=1?v.toFixed(1):v.toExponential(0);};
+  document.getElementById('heatMin').textContent=fmtV(heatRange.min);
+  document.getElementById('heatMax').textContent=fmtV(heatRange.max)+' '+(p.unit||'');
+}
+function populateHeat(){
+  const sel=document.getElementById('heatSel');
+  sel.innerHTML=Object.entries(HEAT_PROPS).map(([k,p])=>
+    `<option value="${k}">${k==='none'?(LANG==='it'?'— heatmap off —':'— heatmap off —'):(LANG==='it'?p.it:p.en)+(p.unit?' ('+p.unit+')':'')}</option>`).join('');
+  sel.value=heatProp;
+}
+document.getElementById('heatSel').addEventListener('change',ev=>{
+  heatProp=ev.target.value;computeHeatRange();refreshCells();
+});
+
+/* ---------- property filter ---------- */
+const FPRESETS={
+  semi:{en:'Semiconductors',it:'Semiconduttori',test:e=>e.bandType==='S'},
+  direct:{en:'Direct-gap',it:'Gap diretto',test:e=>e.bandType==='S'&&e.gapKind==='D'},
+  metal:{en:'Conductors',it:'Conduttori',test:e=>e.bandType==='C'},
+  ferro:{en:'Ferromagnets',it:'Ferromagneti',test:e=>MAG[e.z]&&MAG[e.z][0]==='ferro'},
+  radio:{en:'Radioactive',it:'Radioattivi',test:e=>!!RADIO[e.z]},
+  dopant:{en:'Dopants',it:'Droganti',test:e=>/Dopant/.test((ROLES[e.z]||[]).join(' '))}};
+const FNUM={
+  bandGap:{en:'Band gap',it:'Band gap',unit:'eV'},
+  electronegativity:{en:'Electronegativity',it:'Elettronegatività',unit:'χ'},
+  density:{en:'Density',it:'Densità',unit:'g/cm³'},
+  meltingPoint:{en:'Melting point',it:'Fusione',unit:'K'},
+  atomicRadius:{en:'Atomic radius',it:'Raggio atomico',unit:'pm'}};
+let filterPreset=null,filterProp='bandGap';
+function rangeVals(){
+  const mn=document.getElementById('fMin'),mx=document.getElementById('fMax');
+  return[mn&&mn.value!==''?+mn.value:null,mx&&mx.value!==''?+mx.value:null];
+}
+function filterActive(){const[a,b]=rangeVals();return!!filterPreset||a!=null||b!=null}
+function filterTest(e){
+  if(filterPreset&&!FPRESETS[filterPreset].test(e))return false;
+  const[mn,mx]=rangeVals();
+  if(mn!=null||mx!=null){const v=e[filterProp];if(v==null)return false;
+    if(mn!=null&&v<mn)return false;if(mx!=null&&v>mx)return false;}
+  return true;
+}
+function applyFilter(){
+  const active=filterActive();let n=0;
+  document.querySelectorAll('.cell').forEach(c=>{
+    const e=ELEMENTS[+c.dataset.z-1],ok=!active||filterTest(e);
+    c.classList.toggle('searchdim',active&&!ok);if(ok)n++;
+  });
+  const fc=document.getElementById('filterCount');
+  if(fc)fc.textContent=active?`${n} ${LANG==='it'?'elementi corrispondono':'elements match'}`:'';
+}
+function renderFilterPanel(){
+  const p=document.getElementById('filterPanel');
+  p.innerHTML=`<div class="frow">`+
+    Object.entries(FPRESETS).map(([k,v])=>`<span class="fchip${filterPreset===k?' on':''}" data-p="${k}">${LANG==='it'?v.it:v.en}</span>`).join('')+
+    `</div><div class="frange"><select id="fProp">`+
+    Object.entries(FNUM).map(([k,v])=>`<option value="${k}"${filterProp===k?' selected':''}>${LANG==='it'?v.it:v.en} (${v.unit})</option>`).join('')+
+    `</select><input id="fMin" type="number" inputmode="decimal" placeholder="min"><span style="color:var(--dim)">–</span>`+
+    `<input id="fMax" type="number" inputmode="decimal" placeholder="max">`+
+    `<button class="fchip" id="fClear">${LANG==='it'?'azzera':'clear'}</button></div><div id="filterCount"></div>`;
+  p.querySelectorAll('.fchip[data-p]').forEach(ch=>ch.addEventListener('click',()=>{
+    filterPreset=filterPreset===ch.dataset.p?null:ch.dataset.p;
+    p.querySelectorAll('.fchip[data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===filterPreset));
+    applyFilter();
+  }));
+  document.getElementById('fProp').addEventListener('change',ev=>{filterProp=ev.target.value;applyFilter()});
+  ['fMin','fMax'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilter));
+  document.getElementById('fClear').addEventListener('click',()=>{
+    filterPreset=null;document.getElementById('fMin').value='';document.getElementById('fMax').value='';
+    p.querySelectorAll('.fchip[data-p]').forEach(x=>x.classList.remove('on'));applyFilter();
+  });
+  applyFilter();
+}
+document.getElementById('filterBtn').addEventListener('click',()=>{
+  const p=document.getElementById('filterPanel'),btn=document.getElementById('filterBtn');
+  const show=!p.classList.contains('show');
+  p.classList.toggle('show',show);btn.classList.toggle('on',show);
+  if(show&&!p.innerHTML.trim())renderFilterPanel();
+});
+
+/* ---------- language toggle ---------- */
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.getElementById('langToggle').textContent=LANG.toUpperCase();
+  document.getElementById('hSub').textContent=t('sub');
+  document.getElementById('searchBox').placeholder=t('search');
+  document.getElementById('filterBtn').textContent='⚲ '+(LANG==='it'?'FILTRO':'FILTER');
+  const navIcons={navTable:'⊞',navPhys:'ƒ',navCmp:'⇄',navMap:'◬'},
+    navKey={navTable:'nav_table',navPhys:'nav_phys',navCmp:'nav_cmp',navMap:'nav_map'};
+  for(const id in navKey){const b=document.getElementById(id);if(b)b.innerHTML=`<span class="ic">${navIcons[id]}</span>${t(navKey[id])}`;}
+  document.getElementById('tabData').textContent=t('tab_data');
+  document.getElementById('tabPhys').textContent=t('tab_phys');
+  document.getElementById('tabComp').textContent=t('tab_comp');
+  const mk={chem:'m_chem',semi:'m_semi',phot:'m_phot',mag:'m_mag'};
+  document.querySelectorAll('#modes button').forEach(b=>{b.textContent=t(mk[b.dataset.mode])});
+  document.querySelectorAll('.cell').forEach(c=>{
+    const e=ELEMENTS[+c.dataset.z-1],nm=c.querySelector('.nm');
+    if(nm)nm.textContent=elName(e);c.setAttribute('aria-label',elName(e));
+  });
+  populateHeat();
+  if(document.getElementById('filterPanel').innerHTML.trim())renderFilterPanel();
+  renderQuick();renderCompare();
+  if(curElem){document.getElementById('shName').textContent=`${curElem.z} · ${elName(curElem)}`;
+    if(sheet.classList.contains('open'))renderTab();}
+}
+document.getElementById('langToggle').addEventListener('click',()=>{
+  LANG=LANG==='en'?'it':'en';try{localStorage.setItem('sshet-lang',LANG)}catch(_){}
+  applyLang();
 });
 
 /* ---------- day / night theme ---------- */
@@ -1474,7 +1856,7 @@ function matData(id){
 }
 function renderCompare(){
   const opts=`<optgroup label="— Compounds —">${COMPOUNDS.map((c,i)=>`<option value="c${i}">${c.f} · ${c.name}</option>`).join('')}</optgroup>`+
-    `<optgroup label="— Elements —">${ELEMENTS.map(e=>`<option value="e${e.z}">${e.z} ${e.symbol} · ${e.name}</option>`).join('')}</optgroup>`;
+    `<optgroup label="— Elements —">${ELEMENTS.map(e=>`<option value="e${e.z}">${e.z} ${e.symbol} · ${elName(e)}</option>`).join('')}</optgroup>`;
   const mats=cmpSel.map(matData);
   const row=(k,f)=>`<tr><td>${k}</td>${mats.map(f).join('')}</tr>`;
   const v=(x,u='')=>x==null?'—':x+u;
@@ -1483,6 +1865,7 @@ function renderCompare(){
     <div class="sub">Pick up to 4 elements or compounds. Tap a selected chip to remove it.</div>
     <div class="cmp-pick"><select id="cmpAdd">${opts}</select><button id="cmpAddBtn">+ ADD</button></div>
     <div class="cmp-sel">${cmpSel.map((id,i)=>`<span class="chip" data-i="${i}">${matData(id).label} ✕</span>`).join('')||'<span style="color:var(--dim);font-size:11px">nothing selected</span>'}</div>
+    <div class="cmp-exp">${cmpSel.length?`<button id="cmpCsv">⬇ CSV</button><button id="cmpSvg">⬇ ${LANG==='it'?'IMMAGINE':'IMAGE'}</button>`:''}</div>
     <div id="cmpTableWrap"><table class="cmp">
       <tr><td></td>${mats.map(m=>`<th>${m.label}</th>`).join('')}</tr>
       ${row('Atomic number',m=>`<td>${m.z}</td>`)}
@@ -1501,6 +1884,42 @@ function renderCompare(){
   });
   cmpView.querySelectorAll('.cmp-sel .chip').forEach(ch=>
     ch.addEventListener('click',()=>{cmpSel.splice(+ch.dataset.i,1);renderCompare();}));
+  const ec=document.getElementById('cmpCsv'),es=document.getElementById('cmpSvg');
+  if(ec)ec.addEventListener('click',exportCmpCSV);
+  if(es)es.addEventListener('click',exportCmpSVG);
+}
+function cmpRows(){
+  return[['Property / Proprietà',m=>m.label],['Name / Nome',m=>m.name],['Atomic number',m=>m.z],
+   ['Band gap (eV)',m=>m.bg==null?'':m.bg+(m.dir?(m.dir==='D'?' direct':' indirect'):'')],
+   ['Crystal structure',m=>m.xtal],['Density (g/cm3)',m=>m.dens==null?'':m.dens],
+   ['Electron mobility (cm2/Vs)',m=>m.me==null?'':m.me],['Hole mobility (cm2/Vs)',m=>m.mh==null?'':m.mh],
+   ['Rel. permittivity',m=>m.eps==null?'':m.eps],['Thermal cond. (W/mK)',m=>m.kap==null?'':m.kap],
+   ['Magnetism',m=>m.mag||'']];
+}
+function downloadBlob(data,name,type){
+  const b=new Blob([data],{type}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function exportCmpCSV(){
+  const mats=cmpSel.map(matData),rows=cmpRows().slice(2),esc=v=>`"${String(v).replace(/"/g,'""')}"`;
+  let csv=['Property',...mats.map(m=>m.label)].map(esc).join(',')+'\n';
+  csv+=rows.map(([k,f])=>[k,...mats.map(f)].map(esc).join(',')).join('\n');
+  downloadBlob(csv,'comparison.csv','text/csv;charset=utf-8');
+  try{if(navigator.clipboard)navigator.clipboard.writeText(csv)}catch(_){}
+}
+function xmlesc(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function exportCmpSVG(){
+  const mats=cmpSel.map(matData),rows=cmpRows().slice(2),colW=124,c0=178,rh=26;
+  const W=c0+colW*mats.length,H=rh*(rows.length+1)+12;
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`+
+    `<rect width="${W}" height="${H}" fill="#0a0e1a"/>`;
+  mats.forEach((m,i)=>s+=`<text x="${c0+colW*i+colW/2}" y="22" fill="#00e5ff" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle">${xmlesc(m.label)}</text>`);
+  rows.forEach(([k,f],r)=>{const y=rh*(r+1)+22;
+    s+=`<text x="10" y="${y}" fill="#7a8bb0" font-family="monospace" font-size="11">${xmlesc(k)}</text>`;
+    mats.forEach((m,i)=>{const v=f(m);s+=`<text x="${c0+colW*i+colW/2}" y="${y}" fill="#dce6f5" font-family="monospace" font-size="11" text-anchor="middle">${xmlesc(v===''?'—':v)}</text>`;});
+    s+=`<line x1="6" y1="${y+7}" x2="${W-6}" y2="${y+7}" stroke="#1f2a4a" stroke-width="0.6"/>`;});
+  downloadBlob(s+'</svg>','comparison.svg','image/svg+xml');
 }
 
 /* ---------- semiconductor materials map (Eg vs lattice constant) ---------- */
@@ -1558,7 +1977,7 @@ function renderQuick(){
   const items=[...favs.map(z=>({z,f:1})),...recents.filter(z=>!favs.includes(z)).map(z=>({z,f:0}))];
   quickRow.style.display=items.length?'':'none';
   quickRow.innerHTML=items.map(it=>
-    `<button class="qchip${it.f?' fav':''}" data-z="${it.z}">${it.f?'★ ':''}${ELEMENTS[it.z-1].symbol} · ${ELEMENTS[it.z-1].name}</button>`).join('');
+    `<button class="qchip${it.f?' fav':''}" data-z="${it.z}">${it.f?'★ ':''}${ELEMENTS[it.z-1].symbol} · ${elName(ELEMENTS[it.z-1])}</button>`).join('');
 }
 quickRow.addEventListener('click',ev=>{
   const b=ev.target.closest('.qchip');if(b)openSheet(ELEMENTS[+b.dataset.z-1]);
@@ -1576,7 +1995,7 @@ document.getElementById('favBtn').addEventListener('click',()=>{
 const searchBox=document.getElementById('searchBox');
 function searchMatches(q){
   return ELEMENTS.filter(e=>e.symbol.toLowerCase().startsWith(q)||
-    e.name.toLowerCase().includes(q)||String(e.z)===q);
+    e.name.toLowerCase().includes(q)||(IT_NAMES[e.z]||'').toLowerCase().includes(q)||String(e.z)===q);
 }
 searchBox.addEventListener('input',()=>{
   const q=searchBox.value.trim().toLowerCase();
@@ -1623,8 +2042,8 @@ buildTable();
 calcBragg();calcRay();calcDecay();calcNi();calcVegard();calcDope();cvShow(0.80);
 physXtal=initXtal3d(document.getElementById('xtalSvg'),'FCC');
 document.getElementById('xtalCaption').textContent=STRUCTS.FCC.cap;
-drawBandK('Si');quizNext();
-renderCompare();renderMap();renderQuick();applySize();
+drawBandK('Si');drawDevice('mos');quizNext();
+renderCompare();renderMap();renderQuick();applySize();applyLang();
 /* deep links: #e=49 opens an element, #v=phys|cmp|map opens a view */
 (function(){
   const h=location.hash;

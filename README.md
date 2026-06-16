@@ -16,21 +16,31 @@ semiconductor / insulator classification, effective mass and device applications
   (direct vs indirect) plus a III-V compounds section: **InP**, GaAs, In₀.₅₃Ga₀.₄₇As, GaN,
   Al₀.₃Ga₀.₇As, 4H-SiC, InSb with band gaps and lattice constants.
 - **Physics reference tab** — Bragg's law calculator, Rayleigh resolution calculator,
-  intrinsic carrier concentration vs temperature, SVG crystal structure viewer
-  (FCC / BCC / diamond cubic / zincblende), and key formulas with a Fermi–Dirac sketch.
+  radioactive-decay calculator, intrinsic carrier concentration with a **temperature-dependent
+  band gap (Varshni)**, SVG crystal structure viewer (FCC / BCC / diamond cubic / zincblende),
+  **device cross-sections** (n-MOSFET / InP laser / GaN HEMT), and key formulas with a Fermi–Dirac sketch.
 - **Day / night theme** — full light theme toggle, persisted across sessions.
+- **English / Italian** — language toggle for element names and the browse/detail chrome,
+  persisted across sessions.
 - **Engineer view modes** — recolor the table by Chemistry, Semiconductor (dopants /
   semiconductors / dielectrics / metals), Photonics or Magnetics relevance.
+- **Property heatmaps** — colour the whole table by a continuous property (atomic radius,
+  electronegativity, melting point, density, log-scaled crustal abundance) with a colour scale.
+- **Property filter** — highlight only the elements matching presets (semiconductors, direct-gap,
+  conductors, ferromagnets, radioactive, dopants) and/or a numeric min/max range.
 - **Magnetism** — per-element classification (dia/para/ferro/antiferromagnetic),
   susceptibility, ordered moment, Curie & Néel temperatures.
 - **Radioactivity** — a ☢ marker on every radioactive element (Tc, Pm and all Z ≥ 84) with
-  most-stable isotope, half-life, decay mode and a short note; plus a Physics-tab decay
-  calculator with decay-mode and dose-unit (Bq / Gy / Sv) reference cards.
+  most-stable isotope, half-life, decay mode and a short note; **decay-chain diagrams** for the
+  uranium and thorium series; plus a Physics-tab decay calculator with decay-mode and
+  dose-unit (Bq / Gy / Sv) reference cards.
+- **Periodic trends** — atomic-radius / abundance data per element, plus a Data-tab mini-chart of
+  the property across the element's period, and °K/°C/°F unit switching.
 - **Electronic structure** — animated shell diagram with valence highlighting and orbital occupancy.
 - **Interactive 3D crystal cells** — drag-to-rotate FCC, BCC, HCP, diamond cubic, zincblende.
 - **Compounds tab** — per-element list of semiconductor compounds (13 materials).
 - **Material comparison** — side-by-side table of up to 4 elements/compounds (mobility,
-  permittivity, thermal conductivity, magnetism…).
+  permittivity, thermal conductivity, magnetism…), exportable as **CSV** or an **SVG image**.
 - **Materials map** — the classic band gap vs lattice constant chart with the InP ecosystem,
   direct/indirect coding and wafer-ecosystem notes.
 - **Full PWA** — `manifest.json` + cache-first `sw.js`; works completely offline after first
