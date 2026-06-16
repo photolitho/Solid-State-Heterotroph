@@ -175,14 +175,16 @@ html[data-theme=light] #backdrop{background:rgba(30,40,70,.35)}
   border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;min-height:32px}
 #langToggle{font-size:11px;letter-spacing:.06em;font-weight:700}
 
-/* ---------- engineer view modes ---------- */
-#modes{display:flex;gap:5px;padding:8px 12px 2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-#modes button{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:6px 11px;border-radius:6px;
-  border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;white-space:nowrap;min-height:30px}
-#modes button.act{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07)}
+/* ---------- table control bar ---------- */
+#ctrlbar{padding:10px 12px 12px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 60%,transparent),transparent)}
 
 /* ---------- detail sheet additions ---------- */
-.sect{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--cyan);margin:18px 0 7px}
+.sect{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--cyan);
+  margin:20px 0 9px;padding-top:13px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.sect::before{content:"";width:8px;height:8px;border-radius:2px;background:currentColor;flex:none;
+  box-shadow:0 0 7px currentColor}
+.sheet-body>.sect:first-child{border-top:none;padding-top:4px;margin-top:6px}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
 .badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;padding:5px 9px;border-radius:6px;
   border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);
@@ -239,7 +241,7 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
 #mapInfo{margin-top:10px;min-height:48px}
 
 /* ---------- search, quick access & table density ---------- */
-#toolsRow{display:flex;gap:8px;padding:10px 12px 0;align-items:center}
+#toolsRow{display:flex;gap:8px;align-items:center}
 #searchBox{flex:1;background:var(--panel);color:var(--txt);border:1px solid var(--line);
   border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:13px;min-height:40px}
 #searchBox:focus{outline:none;border-color:var(--cyan)}
@@ -250,13 +252,14 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
   border:1px solid var(--line);background:var(--panel);color:var(--txt);cursor:pointer;white-space:nowrap}
 .qchip.fav{border-color:var(--amber);color:var(--amber)}
 .cell.searchdim{opacity:.08}
-#tools2{display:flex;gap:8px;padding:8px 12px 0;align-items:center}
-#heatSel{flex:1;background:var(--panel);color:var(--txt);border:1px solid var(--line);
+#tools2{display:flex;gap:8px;padding:8px 0 0;align-items:center}
+#colorByLbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--dim)}
+#colorBy{flex:1;background:var(--panel);color:var(--txt);border:1px solid var(--line);
   border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:12px;min-height:40px}
 #filterBtn{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:0 13px;border-radius:8px;min-height:40px;
   border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;white-space:nowrap}
 #filterBtn.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08)}
-#filterPanel{display:none;margin:8px 12px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:11px 12px}
+#filterPanel{display:none;margin:8px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--panel2);padding:11px 12px}
 #filterPanel.show{display:block}
 #filterPanel .frow{display:flex;flex-wrap:wrap;gap:6px}
 .fchip{font-family:var(--mono);font-size:10.5px;padding:6px 10px;border-radius:14px;
@@ -307,18 +310,20 @@ table.cmp{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:
   <button id="themeToggle" aria-label="toggle day / night theme">☀</button>
   <button id="semiToggle" aria-pressed="false">⏚ SEMI FOCUS</button>
 </header>
-<div id="modes" role="tablist" aria-label="engineer view mode">
-  <button data-mode="chem" class="act">⚗ CHEMISTRY</button>
-  <button data-mode="semi">⏚ SEMICONDUCTOR</button>
-  <button data-mode="phot">✦ PHOTONICS</button>
-  <button data-mode="mag">⊿ MAGNETICS</button>
-</div>
 
 <main>
   <section id="tableView">
-    <div id="toolsRow">
-      <input id="searchBox" type="search" placeholder="search… (si · gallium · 49)" autocomplete="off">
-      <button id="sizeBtn" aria-label="table density">M</button>
+    <div id="ctrlbar">
+      <div id="toolsRow">
+        <input id="searchBox" type="search" placeholder="search… (si · gallium · 49)" autocomplete="off">
+        <button id="sizeBtn" aria-label="table density">M</button>
+      </div>
+      <div id="tools2">
+        <label id="colorByLbl" for="colorBy">COLOR</label>
+        <select id="colorBy" aria-label="colour the table by"></select>
+        <button id="filterBtn">⚲ FILTER</button>
+      </div>
+      <div id="filterPanel"></div>
     </div>
     <div id="tools2">
       <select id="heatSel" aria-label="property heatmap"></select>
@@ -1678,12 +1683,25 @@ function refreshCells(){
       MODE_LEGEND[curMode]().map(([n,c])=>`<span style="--lc:${c}"><i style="background:${c}"></i>${n}</span>`).join('');
   }
 }
-document.getElementById('modes').addEventListener('click',ev=>{
-  const b=ev.target.closest('button');if(!b)return;
-  curMode=b.dataset.mode;
-  document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('act',x===b));
+/* ---------- unified "colour by" selector (categories + gradients) ---------- */
+const COLOR_CATS={chem:{en:'Chemistry',it:'Chimica'},semi:{en:'Semiconductor role',it:'Ruolo semiconduttore'},
+  phot:{en:'Photonics',it:'Fotonica'},mag:{en:'Magnetism',it:'Magnetismo'}};
+function populateColorBy(){
+  const sel=document.getElementById('colorBy');if(!sel)return;
+  const it=LANG==='it',cur=heatProp!=='none'?heatProp:curMode;
+  const cats=Object.entries(COLOR_CATS).map(([k,v])=>`<option value="${k}">${it?v.it:v.en}</option>`).join('');
+  const heat=Object.entries(HEAT_PROPS).filter(([k])=>k!=='none')
+    .map(([k,p])=>`<option value="${k}">${it?p.it:p.en}${p.unit?' ('+p.unit+')':''}</option>`).join('');
+  sel.innerHTML=`<optgroup label="${it?'categorie':'categories'}">${cats}</optgroup>`+
+    `<optgroup label="${it?'gradiente':'gradient'}">${heat}</optgroup>`;
+  sel.value=cur;
+}
+function setColorBy(v){
+  if(HEAT_PROPS[v]){heatProp=v;computeHeatRange();}
+  else{heatProp='none';curMode=v;}
   refreshCells();
-});
+}
+document.getElementById('colorBy').addEventListener('change',ev=>setColorBy(ev.target.value));
 
 /* ---------- property heatmap ---------- */
 const HEAT_PROPS={
@@ -1722,16 +1740,6 @@ function renderHeatScale(){
   document.getElementById('heatMin').textContent=fmtV(heatRange.min);
   document.getElementById('heatMax').textContent=fmtV(heatRange.max)+' '+(p.unit||'');
 }
-function populateHeat(){
-  const sel=document.getElementById('heatSel');
-  sel.innerHTML=Object.entries(HEAT_PROPS).map(([k,p])=>
-    `<option value="${k}">${k==='none'?(LANG==='it'?'— heatmap off —':'— heatmap off —'):(LANG==='it'?p.it:p.en)+(p.unit?' ('+p.unit+')':'')}</option>`).join('');
-  sel.value=heatProp;
-}
-document.getElementById('heatSel').addEventListener('change',ev=>{
-  heatProp=ev.target.value;computeHeatRange();refreshCells();
-});
-
 /* ---------- property filter ---------- */
 const FPRESETS={
   semi:{en:'Semiconductors',it:'Semiconduttori',test:e=>e.bandType==='S'},
@@ -1804,19 +1812,18 @@ function applyLang(){
   document.getElementById('hSub').textContent=t('sub');
   document.getElementById('searchBox').placeholder=t('search');
   document.getElementById('filterBtn').textContent='⚲ '+(LANG==='it'?'FILTRO':'FILTER');
+  document.getElementById('colorByLbl').textContent=LANG==='it'?'COLORE':'COLOR';
   const navIcons={navTable:'⊞',navPhys:'ƒ',navCmp:'⇄',navMap:'◬'},
     navKey={navTable:'nav_table',navPhys:'nav_phys',navCmp:'nav_cmp',navMap:'nav_map'};
   for(const id in navKey){const b=document.getElementById(id);if(b)b.innerHTML=`<span class="ic">${navIcons[id]}</span>${t(navKey[id])}`;}
   document.getElementById('tabData').textContent=t('tab_data');
   document.getElementById('tabPhys').textContent=t('tab_phys');
   document.getElementById('tabComp').textContent=t('tab_comp');
-  const mk={chem:'m_chem',semi:'m_semi',phot:'m_phot',mag:'m_mag'};
-  document.querySelectorAll('#modes button').forEach(b=>{b.textContent=t(mk[b.dataset.mode])});
   document.querySelectorAll('.cell').forEach(c=>{
     const e=ELEMENTS[+c.dataset.z-1],nm=c.querySelector('.nm');
     if(nm)nm.textContent=elName(e);c.setAttribute('aria-label',elName(e));
   });
-  populateHeat();
+  populateColorBy();
   if(document.getElementById('filterPanel').innerHTML.trim())renderFilterPanel();
   renderQuick();renderCompare();
   if(curElem){document.getElementById('shName').textContent=`${curElem.z} · ${elName(curElem)}`;

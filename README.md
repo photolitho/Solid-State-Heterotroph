@@ -22,9 +22,8 @@ semiconductor / insulator classification, effective mass and device applications
 - **Day / night theme** — full light theme toggle, persisted across sessions.
 - **English / Italian** — language toggle for element names and the browse/detail chrome,
   persisted across sessions.
-- **Engineer view modes** — recolor the table by Chemistry, Semiconductor (dopants /
-  semiconductors / dielectrics / metals), Photonics or Magnetics relevance.
-- **Property heatmaps** — colour the whole table by a continuous property (atomic radius,
+- **Colour the table by** — a single selector recolours every tile by a category (Chemistry,
+  Semiconductor role, Photonics, Magnetism) or by a continuous-gradient property (atomic radius,
   electronegativity, melting point, density, log-scaled crustal abundance) with a colour scale.
 - **Property filter** — highlight only the elements matching presets (semiconductors, direct-gap,
   conductors, ferromagnets, radioactive, dopants) and/or a numeric min/max range.
